@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "sentiment-fe",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "fe", "dev"],
+      "port": 5173
+    }
+  ]
+}

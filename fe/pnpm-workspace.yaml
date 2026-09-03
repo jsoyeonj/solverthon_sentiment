@@ -1,0 +1,4 @@
+# pnpm 10+ 는 의존성의 빌드 스크립트 실행을 기본으로 막는다.
+# vite 가 쓰는 esbuild 는 네이티브 바이너리를 설치해야 하므로 여기서만 허용한다.
+allowBuilds:
+  esbuild: true

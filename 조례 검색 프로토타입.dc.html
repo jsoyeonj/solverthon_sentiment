@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+[style*="grid-template-columns"]>*{min-width:0;}
+body{margin:0;-webkit-font-smoothing:antialiased;word-break:keep-all;}
+a{color:#1E3A5F;} a:hover{color:#162A45;}
+.hdr-badge,.hdr-divider,.hdr-user-label{display:inline-flex;}
+button{white-space:nowrap;}
+.nowrap-label{white-space:nowrap;}
+@media (max-width:1100px){.hdr-badge{display:none!important;}}
+@media (max-width:900px){.hdr-divider,.hdr-user-label{display:none!important;}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;background:#F8F9FA;color:#121C28;font-family:'Noto Sans KR',sans-serif;">
+
+  <header style="position:fixed;top:0;left:0;right:0;height:48px;background:#fff;border-bottom:1px solid #E5E7EB;z-index:50;box-shadow:0 1px 2px rgba(0,0,0,.04);">
+    <div style="max-width:1440px;margin:0 auto;padding:0 24px;height:48px;display:flex;align-items:center;justify-content:space-between;overflow-x:auto;">
+      <div style="display:flex;align-items:center;gap:20px;flex-shrink:0;">
+        <div style="display:flex;align-items:baseline;gap:8px;cursor:pointer;" onClick="{{goHome}}" title="홈으로 이동">
+          <span style="font-size:18px;font-weight:700;letter-spacing:-0.02em;color:#1E3A5F;white-space:nowrap;flex-shrink:0;">센티멘트</span>
+          <span class="hdr-user-label" style="font-size:12px;color:#6B7280;font-weight:500;white-space:nowrap;">광역·기초 조례 겹침 확인</span>
+        </div>
+        <nav style="display:flex;align-items:center;height:48px;gap:16px;margin-left:4px;flex-shrink:0;">
+          <button style="{{tabComparisonStyle}} white-space:nowrap;" onClick="{{selectTabComparison}}">조례 대조 분석</button>
+        </nav>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+        <div class="hdr-badge" style="align-items:center;padding:4px 10px;border-radius:4px;background:#F3F4F6;border:1px solid #E5E7EB;color:#374151;font-size:12px;font-weight:500;white-space:nowrap;">
+          <span style="font-family:'Material Symbols Outlined';font-size:15px;color:#1E3A5F;margin-right:4px;">verified_user</span>
+          법제처 국가법령정보 기반
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main style="flex:1;display:flex;flex-direction:column;padding-top:48px;">
+
+    <sc-if value="{{isPortal}}" hint-placeholder-val="{{true}}">
+      <div style="width:100%;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 16px 80px;">
+        <div style="max-width:720px;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center;">
+          <h1 style="font-size:28px;font-weight:700;color:#022448;letter-spacing:-0.02em;margin:0 0 8px;">어느 지역의 민원을 처리하시나요?</h1>
+          <p style="font-size:14px;color:#4B5563;margin:0 0 32px;font-weight:400;">관할 지자체를 선택하시면 광역 및 기초 자치법규 겹침 현황을 대조합니다.</p>
+
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin-bottom:32px;">
+            <sc-for list="{{portalRegions}}" as="region" hint-placeholder-count="6">
+              <button type="button" onClick="{{region.onClick}}" style="{{region.style}} white-space:nowrap;">
+                <sc-if value="{{region.isSelected}}" hint-placeholder-val="{{false}}">
+                  <span style="font-family:'Material Symbols Outlined';font-size:14px;">check</span>
+                </sc-if>
+                <span>{{region.label}}</span>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="width:100%;max-width:640px;background:#fff;border:1px solid #D1D5DB;border-radius:8px;padding:6px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+            <div style="flex:1;display:flex;align-items:center;padding-left:12px;">
+              <span style="font-family:'Material Symbols Outlined';font-size:20px;color:#9CA3AF;margin-right:8px;">search</span>
+              <input type="text" value="{{searchQuery}}" onChange="{{onSearchInputChange}}" onKeyDown="{{onSearchKeyDown}}" placeholder="예: 귀농 지원금 문의가 들어왔습니다" style="width:100%;background:transparent;border:none;outline:none;font-size:14px;color:#1F2937;padding:6px 0;" />
+              <sc-if value="{{searchQuery}}" hint-placeholder-val="{{false}}">
+                <button type="button" onClick="{{clearSearchQuery}}" style="background:none;border:none;color:#9CA3AF;cursor:pointer;padding:4px;margin-right:4px;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:16px;">cancel</span>
+                </button>
+              </sc-if>
+            </div>
+            <button type="button" onClick="{{executeSearchFromPortal}}" style="height:36px;padding:0 20px;border-radius:6px;background:#1E3A5F;color:#fff;border:none;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);flex-shrink:0;">
+              <span>검색</span>
+              <span style="font-family:'Material Symbols Outlined';font-size:15px;">arrow_forward</span>
+            </button>
+          </div>
+
+          <button type="button" onClick="{{viewAllFromPortal}}" style="background:none;border:none;font-size:12px;color:#4B5563;text-decoration:underline;font-weight:500;cursor:pointer;margin-bottom:48px;">검색어 없이 이 지역 전체 보기</button>
+
+          <div style="width:100%;max-width:640px;background:rgba(255,255,255,.9);border:1px solid #DBEAFE;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);text-align:left;margin-bottom:40px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F3F4F6;padding-bottom:14px;margin-bottom:14px;">
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#1E3A5F;white-space:nowrap;flex-shrink:0;">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">tune</span>
+                <span>조례 정합성 상태 분류 기준</span>
+              </div>
+              <span class="nowrap-label" style="font-size:11px;color:#9CA3AF;min-width:0;text-align:right;">표준 행정 검토 지침</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+              <div style="border:1px solid #DBEAFE;border-radius:4px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px;">
+                <span class="nowrap-label" style="align-self:flex-start;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;">겹침 후보</span>
+                <p style="font-size:12px;color:#4B5563;line-height:1.5;margin:0;">동일 사무 또는 지원 기준의 범위가 중복되어 통합 검토가 권고되는 상태</p>
+              </div>
+              <div style="border:1px solid #FDE68A;border-radius:4px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px;">
+                <span class="nowrap-label" style="align-self:flex-start;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;">확인 필요</span>
+                <p style="font-size:12px;color:#4B5563;line-height:1.5;margin:0;">광역 기본조례와 기초 위임조례 간 수혜 대상·지원 비율 상충 소지 존재</p>
+              </div>
+              <div style="border:1px solid #E5E7EB;border-radius:4px;padding:12px;background:#fff;display:flex;flex-direction:column;gap:6px;">
+                <span class="nowrap-label" style="align-self:flex-start;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#F3F4F6;color:#374151;border:1px solid #E5E7EB;">겹침 없음</span>
+                <p style="font-size:12px;color:#4B5563;line-height:1.5;margin:0;">고유 자치사무에 국한되거나 상위 광역 조례의 위임 범위 내에서 적법 운용</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:12px;color:#6B7280;font-weight:400;">본청 366건 · 파일럿 5개 지자체 2,944건 · 총 3,310건 색인</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isResults}}" hint-placeholder-val="{{false}}">
+      <div style="width:100%;display:flex;flex-direction:column;flex:1;">
+        <div style="width:100%;background:#EEF4FF;border-bottom:1px solid #E5E7EB;padding:8px 24px;">
+          <div style="max-width:1440px;margin:0 auto;display:flex;flex-direction:column;gap:2px;font-size:12px;color:#4B5563;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#022448;">account_balance</span>
+              <span style="font-weight:600;color:#022448;">광역-기초 법령 정합성 검증</span>
+              <span style="color:#D1D5DB;">/</span>
+              <span class="wrap-ok">전라남도·광주광역시 통합 자치법규 통합 데이터베이스</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;color:#6B7280;">
+              <span style="display:inline-block;width:8px;height:8px;border-radius:9999px;background:#059669;"></span>
+              <span class="wrap-ok">국가법령정보센터 실시간 동기화 (최근 갱신: 2025. 02. 24 09:30)</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="max-width:1440px;width:100%;margin:0 auto;display:flex;flex:1;">
+          <aside style="width:260px;flex-shrink:0;background:#fff;border-right:1px solid #E5E7EB;padding:20px;display:flex;flex-direction:column;justify-content:space-between;">
+            <div style="display:flex;flex-direction:column;gap:20px;">
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                  <h2 style="font-size:12px;font-weight:700;color:#1F2937;display:flex;align-items:center;gap:6px;margin:0;white-space:nowrap;flex-shrink:0;">
+                    <span style="font-family:'Material Symbols Outlined';font-size:18px;color:#1E3A5F;">location_city</span>
+                    관할 지자체 선택
+                  </h2>
+                  <span class="nowrap-label" style="font-size:11px;color:#6B7280;background:#F3F4F6;padding:2px 6px;border-radius:4px;">{{regionUnitLabel}}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <sc-for list="{{sidebarRegions}}" as="r" hint-placeholder-count="6">
+                    <button type="button" onClick="{{r.onClick}}" style="{{r.rowStyle}}">
+                      <span style="display:flex;align-items:center;gap:8px;overflow:hidden;">
+                        <sc-if value="{{r.isSelected}}" hint-placeholder-val="{{false}}">
+                          <span style="font-family:'Material Symbols Outlined';font-size:16px;">check</span>
+                        </sc-if>
+                        <sc-if value="{{r.notSelected}}" hint-placeholder-val="{{true}}">
+                          <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#9CA3AF;">{{r.typeIcon}}</span>
+                        </sc-if>
+                        <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{r.fullName}}</span>
+                      </span>
+                      <span class="nowrap-label" style="{{r.badgeStyle}}">{{r.badgeText}}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+
+              <div style="height:1px;background:#E5E7EB;"></div>
+
+              <div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                  <h2 style="font-size:12px;font-weight:700;color:#1F2937;display:flex;align-items:center;gap:6px;margin:0;white-space:nowrap;flex-shrink:0;">
+                    <span style="font-family:'Material Symbols Outlined';font-size:18px;color:#1E3A5F;">tune</span>
+                    판정 필터
+                  </h2>
+                  <span style="font-size:11px;color:#6B7280;font-weight:500;">선택 {{selectedFilterCount}}건</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <label onClick="{{toggleFilterCandidate}}" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:4px;cursor:pointer;border:1px solid transparent;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="checkbox" checked="{{filterCandidate}}" onChange="{{noop}}" style="width:16px;height:16px;accent-color:#1E3A5F;cursor:pointer;" />
+                      <span style="font-size:12px;color:#1F2937;font-weight:500;">겹침 후보</span>
+                    </div>
+                    <span class="nowrap-label" style="display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;padding:2px 8px;border-radius:9999px;">{{candidateCount}}</span>
+                  </label>
+                  <label onClick="{{toggleFilterNeedCheck}}" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:4px;cursor:pointer;border:1px solid transparent;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="checkbox" checked="{{filterNeedCheck}}" onChange="{{noop}}" style="width:16px;height:16px;accent-color:#1E3A5F;cursor:pointer;" />
+                      <span style="font-size:12px;color:#1F2937;font-weight:500;">확인 필요</span>
+                    </div>
+                    <span class="nowrap-label" style="display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:#FFFBEB;color:#B45309;border:1px solid #FDE68A;padding:2px 8px;border-radius:9999px;">{{needCheckCount}}</span>
+                  </label>
+                  <label onClick="{{toggleFilterNoOverlap}}" style="display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:4px;cursor:pointer;border:1px solid transparent;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="checkbox" checked="{{filterNoOverlap}}" onChange="{{noop}}" style="width:16px;height:16px;accent-color:#1E3A5F;cursor:pointer;" />
+                      <span style="font-size:12px;color:#1F2937;font-weight:500;">겹침 없음</span>
+                    </div>
+                    <span class="nowrap-label" style="display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;background:#F3F4F6;color:#374151;border:1px solid #E5E7EB;padding:2px 8px;border-radius:9999px;">{{noOverlapCount}}</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="background:#F8F9FF;border-radius:6px;padding:12px;border:1px solid #DBEAFE;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:6px;color:#1E3A5F;font-size:12px;font-weight:600;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:15px;">info</span>
+                  <span>법제 검토 지침 안내</span>
+                </div>
+                <p style="font-size:11px;color:#4B5563;line-height:1.5;margin:0;">광역 자치단체의 위임사무 및 자치사무와 기초자치단체 조례 간 조항 충돌 또는 권한 침해 여부를 자동 대조합니다.</p>
+              </div>
+            </div>
+
+            <div style="padding-top:16px;border-top:1px solid #E5E7EB;margin-top:24px;">
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#374151;font-weight:500;">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#1D4ED8;">verified</span>
+                <span>전체 {{regionItemsCount}}건 조례 정합성 분석 완료</span>
+              </div>
+              <div style="font-size:11px;color:#9CA3AF;margin-top:4px;">분석엔진 버전: K-Ordinance LexScan v3.2</div>
+            </div>
+          </aside>
+
+          <main style="flex:1;padding:20px 32px;background:#F8F9FA;display:flex;flex-direction:column;min-width:0;">
+            <div style="position:sticky;top:48px;z-index:20;background:rgba(248,249,250,.95);padding-bottom:16px;">
+              <div style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+                  <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#F3F4F6;border:1px solid #D1D5DB;border-radius:4px;color:#1F2937;font-size:12px;font-weight:500;flex-shrink:0;">
+                    <span style="font-family:'Material Symbols Outlined';font-size:14px;color:#4B5563;">pin_drop</span>
+                    <span class="nowrap-label">지역: {{currentRegionName}}</span>
+                    <button type="button" onClick="{{removeRegionTag}}" title="지역 태그 제거" style="background:none;border:none;padding:0;margin:0 0 0 2px;cursor:pointer;display:flex;color:#6B7280;">
+                      <span style="font-family:'Material Symbols Outlined';font-size:14px;">close</span>
+                    </button>
+                  </span>
+                  <span style="color:#D1D5DB;font-weight:300;">|</span>
+                  <div style="position:relative;flex:1;display:flex;align-items:center;">
+                    <span style="font-family:'Material Symbols Outlined';font-size:18px;color:#9CA3AF;margin-left:4px;margin-right:8px;">search</span>
+                    <input type="text" value="{{searchQuery}}" onChange="{{onResultsSearchInputChange}}" placeholder="조례 제명, 조항 내용 또는 키워드를 입력하세요" style="width:100%;background:transparent;border:none;outline:none;font-size:13px;color:#1F2937;" />
+                    <sc-if value="{{searchQuery}}" hint-placeholder-val="{{false}}">
+                      <button type="button" onClick="{{clearResultsSearchQuery}}" style="background:none;border:none;color:#9CA3AF;cursor:pointer;padding:4px;margin-right:4px;">
+                        <span style="font-family:'Material Symbols Outlined';font-size:16px;">cancel</span>
+                      </button>
+                    </sc-if>
+                  </div>
+                </div>
+                <button type="button" onClick="{{rerunSearch}}" style="height:36px;padding:0 16px;border-radius:6px;background:#1E3A5F;color:#fff;border:none;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;cursor:pointer;flex-shrink:0;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:16px;">search</span>
+                  <span>검색</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="margin-top:4px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <h2 style="font-size:14px;font-weight:700;color:#1F2937;margin:0;">{{currentRegionName}} 조례 <span style="{{resultCountColor}}">{{sortedItemsCount}}건</span></h2>
+                <span style="display:inline-block;width:4px;height:4px;border-radius:9999px;background:#9CA3AF;"></span>
+                <span style="font-size:12px;color:#6B7280;">대조 기준: 전남광주통합특별시 자치법규</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6B7280;">
+                <button type="button" onClick="{{sortLatest}}" style="{{sortLatestStyle}}">최신순</button>
+                <span style="color:#D1D5DB;">|</span>
+                <button type="button" onClick="{{sortRelevance}}" style="{{sortRelevanceStyle}}">관련도순<sc-if value="{{isSortRelevance}}" hint-placeholder-val="{{true}}"> ✓</sc-if></button>
+                <span style="color:#D1D5DB;">|</span>
+                <button type="button" onClick="{{sortName}}" style="{{sortNameStyle}}">조례명순</button>
+              </div>
+            </div>
+
+            <sc-if value="{{hasDisplayedItems}}" hint-placeholder-val="{{true}}">
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <sc-for list="{{displayedItems}}" as="item" hint-placeholder-count="5">
+                  <article style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04);">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+                      <div style="display:flex;flex-direction:column;gap:4px;">
+                        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6B7280;font-family:ui-monospace,monospace;">
+                          <span>{{item.ordinanceNo}}</span>
+                          <span style="color:#D1D5DB;">·</span>
+                          <span>시행 {{item.enforcementDate}}</span>
+                        </div>
+                        <h3 onClick="{{item.onSelect}}" style="font-weight:700;font-size:16px;color:#111827;line-height:1.4;margin:0;cursor:pointer;">{{item.title}}</h3>
+                      </div>
+                      <span class="nowrap-label" style="flex-shrink:0;display:inline-flex;align-items:center;padding:4px 10px;border-radius:9999px;font-size:12px;font-weight:600;background:{{item.badgeBg}};color:{{item.badgeColor}};border:1px solid {{item.badgeBorder}};">{{item.statusLabel}}</span>
+                    </div>
+
+                    <p style="margin-top:8px;font-size:12px;color:#4B5563;line-height:1.6;">{{item.summary}}</p>
+
+                    <sc-if value="{{item.hasMatch}}" hint-placeholder-val="{{false}}">
+                      <div style="margin-top:12px;font-size:12px;padding:12px;border-radius:4px;display:flex;align-items:flex-start;gap:8px;background:{{item.matchBg}};border:1px solid {{item.matchBorder}};color:#1F2937;">
+                        <span style="font-family:'Material Symbols Outlined';font-size:16px;flex-shrink:0;margin-top:2px;color:{{item.matchIconColor}};">{{item.matchIconName}}</span>
+                        <div style="flex:1;">
+                          <span class="wrap-ok" style="font-weight:600;color:#111827;">본청 「{{item.matchName}}」</span>
+                          <span class="wrap-ok" style="color:#4B5563;display:block;margin-top:2px;">({{item.matchNote}})</span>
+                        </div>
+                      </div>
+                    </sc-if>
+
+                    <sc-if value="{{item.isNoOverlap}}" hint-placeholder-val="{{false}}">
+                      <div style="margin-top:10px;font-size:12px;color:#6B7280;font-style:italic;padding:4px;display:flex;align-items:center;gap:6px;">
+                        <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#9CA3AF;">check_circle</span>
+                        <span class="wrap-ok">{{item.noOverlapReason}}</span>
+                      </div>
+                    </sc-if>
+
+                    <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid #F3F4F6;">
+                      <div style="display:flex;align-items:center;gap:8px;color:#9CA3AF;font-size:12px;">
+                        <span>소관부서: {{item.department}}</span>
+                        <span>·</span>
+                        <span>담당: {{item.team}}</span>
+                      </div>
+                      <button type="button" onClick="{{item.onSelect}}" style="background:none;border:none;display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#1E3A5F;font-weight:600;cursor:pointer;text-decoration:underline;">
+                        <span>비교 보기</span>
+                        <span style="font-family:'Material Symbols Outlined';font-size:14px;text-decoration:none;">arrow_forward</span>
+                      </button>
+                    </div>
+                  </article>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{hasDisplayedItems}}" hint-placeholder-val="{{true}}" hint-negate="{{true}}">
+            </sc-if>
+            <sc-if value="{{noDisplayedItems}}" hint-placeholder-val="{{false}}">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:440px;background:#fff;border:1px dashed #D1D5DB;border-radius:12px;margin-top:8px;padding:48px;text-align:center;position:relative;overflow:hidden;">
+                <div style="width:56px;height:56px;border-radius:9999px;background:#F9FAFB;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:#9CA3AF;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:28px;">search_off</span>
+                </div>
+                <h3 style="font-size:16px;font-weight:700;color:#111827;margin:0 0 8px;">검색 결과가 없습니다. 다른 표현으로 다시 검색해 보세요.</h3>
+                <p style="font-size:12px;color:#4B5563;max-width:420px;margin:0 auto;line-height:1.6;">
+                  입력하신 검색어의 철자를 확인하시거나,
+                  <sc-for list="{{suggestionWords}}" as="w" hint-placeholder-count="3">
+                    <span onClick="{{w.onClick}}" style="font-weight:600;color:#1E3A5F;text-decoration:underline;cursor:pointer;"> '{{w.label}}' </span>
+                  </sc-for>
+                  등 보다 일반적인 행정 용어로 검색해 보세요.
+                </p>
+                <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-top:20px;flex-wrap:wrap;">
+                  <span style="font-size:12px;color:#9CA3AF;margin-right:4px;font-weight:500;">추천 검색어:</span>
+                  <sc-for list="{{recommendedTags}}" as="tag" hint-placeholder-count="4">
+                    <button type="button" onClick="{{tag.onClick}}" style="padding:4px 10px;border-radius:4px;background:#F3F4F6;color:#374151;font-size:12px;border:1px solid #E5E7EB;cursor:pointer;">{{tag.label}}</button>
+                  </sc-for>
+                </div>
+                <div style="margin-top:28px;padding-top:20px;border-top:1px solid #E5E7EB;width:100%;max-width:360px;display:flex;justify-content:center;">
+                  <button type="button" onClick="{{clearAllFilters}}" style="padding:8px 16px;background:#fff;border:1px solid #D1D5DB;border-radius:4px;color:#374151;font-weight:500;font-size:12px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+                    <span style="font-family:'Material Symbols Outlined';font-size:16px;">list_alt</span>
+                    <span>{{currentRegionName}} 전체 조례 목록 보기 ({{regionItemsCount}}건)</span>
+                  </button>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{hasDisplayedItems}}" hint-placeholder-val="{{true}}">
+              <div style="margin-top:24px;padding-top:16px;border-top:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#6B7280;">
+                <span>표시 건수: {{displayFrom}} - {{displayTo}} / 총 {{sortedItemsCount}}건</span>
+                <div style="display:flex;align-items:center;gap:4px;">
+                  <button onClick="{{prevPage}}" disabled="{{isFirstPage}}" style="{{prevPageStyle}}">이전</button>
+                  <sc-for list="{{pageNumbers}}" as="p" hint-placeholder-count="1">
+                    <button onClick="{{p.onClick}}" style="{{p.style}}">{{p.num}}</button>
+                  </sc-for>
+                  <button onClick="{{nextPage}}" disabled="{{isLastPage}}" style="{{nextPageStyle}}">다음</button>
+                </div>
+              </div>
+            </sc-if>
+          </main>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isDetail}}" hint-placeholder-val="{{false}}">
+      <div style="width:100%;display:flex;flex-direction:column;flex:1;background:#F8F9FA;">
+        <div style="width:100%;background:#fff;border-bottom:1px solid #E5E7EB;">
+          <div style="max-width:1440px;margin:0 auto;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+            <nav style="display:flex;align-items:center;gap:6px;font-size:12px;color:#6B7280;">
+              <button onClick="{{backToResults}}" style="background:none;border:none;cursor:pointer;color:#6B7280;font-size:12px;">{{selOrd.region}}</button>
+              <span style="color:#D1D5DB;">›</span>
+              <button onClick="{{backToResults}}" style="background:none;border:none;cursor:pointer;color:#6B7280;font-size:12px;">검색 결과</button>
+              <span style="color:#D1D5DB;">›</span>
+              <span style="color:#1E3A5F;font-weight:700;">상세</span>
+            </nav>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#6B7280;font-family:ui-monospace,monospace;">
+              <span>문서식별부호: <span style="font-weight:600;color:#1F2937;">{{selOrd.id}}</span></span>
+              <span style="color:#D1D5DB;">|</span>
+              <span>최종 동기화: {{selOrd.lastSyncDate}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="max-width:1440px;width:100%;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:24px;">
+          <section style="display:flex;flex-direction:column;gap:12px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
+                <h1 style="font-size:22px;font-weight:700;color:#111827;letter-spacing:-0.01em;margin:0;">{{selOrd.title}}</h1>
+                <span class="nowrap-label" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:9999px;font-size:12px;font-weight:600;background:{{selOrd.badgeBg}};color:{{selOrd.badgeColor}};border:1px solid {{selOrd.badgeBorder}};">
+                  <sc-if value="{{selOrd.isNeedCheck}}" hint-placeholder-val="{{false}}">
+                    <span style="font-family:'Material Symbols Outlined';font-size:15px;">warning</span>
+                  </sc-if>
+                  <span>{{selOrd.statusLabel}}</span>
+                </span>
+                <sc-if value="{{selOrd.isNoOverlap}}" hint-placeholder-val="{{false}}">
+                  <span class="nowrap-label" style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:500;background:#EFF6FF;color:#1E40AF;border:1px solid #BFDBFE;">기초자치조례</span>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:#6B7280;">
+                <span style="display:inline-block;width:8px;height:8px;border-radius:9999px;background:{{selOrd.dotColor}};"></span>
+                <span class="wrap-ok">{{selOrd.subheadNote}}</span>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:12px;color:#6B7280;">
+              <span>{{selOrd.ordinanceNo}}</span><span style="color:#D1D5DB;">·</span>
+              <span>시행 {{selOrd.enforcementDate}}</span><span style="color:#D1D5DB;">·</span>
+              <span>소관부서: {{selOrd.department}}</span><span style="color:#D1D5DB;">·</span>
+              <span>담당: {{selOrd.team}}</span>
+              <sc-if value="{{selOrd.enactmentDate}}" hint-placeholder-val="{{false}}">
+                <span style="color:#D1D5DB;">·</span><span>제정: {{selOrd.enactmentDate}}</span>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{selOrd.hasInternalConflict}}" hint-placeholder-val="{{false}}">
+              <div style="width:100%;border-radius:8px;background:#FFFBEB;border:1px solid #F59E0B;padding:20px;">
+                <div style="display:flex;align-items:center;gap:8px;color:#92400E;font-weight:700;font-size:15px;margin-bottom:12px;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:20px;color:#D97706;">error</span>
+                  <span>{{selOrd.conflictDetails.title}}</span>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:12px;">
+                  <div style="background:#fff;border:1px solid #FDE68A;border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:#FEF3C7;color:#92400E;font-size:12px;font-weight:600;border:1px solid #FDE68A;">{{selOrd.conflictDetails.clauseA.tag}}</span>
+                      <span style="font-size:11px;color:#6B7280;font-family:ui-monospace,monospace;">{{selOrd.conflictDetails.clauseA.label}}</span>
+                    </div>
+                    <p style="font-size:12px;color:#1F2937;line-height:1.6;margin:0;padding-left:8px;border-left:2px solid #D97706;">{{selOrd.conflictDetails.clauseA.text}}</p>
+                  </div>
+                  <div style="background:#fff;border:1px solid #FDE68A;border-radius:6px;padding:14px;display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:#FEF3C7;color:#92400E;font-size:12px;font-weight:600;border:1px solid #FDE68A;">{{selOrd.conflictDetails.clauseB.tag}}</span>
+                      <span style="font-size:11px;color:#6B7280;font-family:ui-monospace,monospace;">{{selOrd.conflictDetails.clauseB.label}}</span>
+                    </div>
+                    <p style="font-size:12px;color:#1F2937;line-height:1.6;margin:0;padding-left:8px;border-left:2px solid #D97706;">{{selOrd.conflictDetails.clauseB.text}}</p>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;color:#4B5563;font-size:12px;padding-top:8px;border-top:1px solid rgba(253,230,138,.6);">
+                  <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#D97706;">info</span>
+                  <span class="wrap-ok">{{selOrd.conflictDetails.note}}</span>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{selOrd.isNoOverlap}}" hint-placeholder-val="{{false}}">
+              <div style="background:#EEF4FF;border:1px solid #BFDBFE;border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:22px;color:#1E3A5F;">verified_user</span>
+                  <h2 style="font-size:15px;font-weight:700;color:#1E3A5F;margin:0;">본청과 겹치는 조례 없음</h2>
+                </div>
+                <p style="font-size:12px;color:#374151;line-height:1.6;margin:0;">{{selOrd.noOverlapReason}}</p>
+                <div style="display:flex;align-items:center;gap:6px;padding-top:8px;margin-top:4px;border-top:1px solid #BFDBFE;color:#6B7280;font-size:12px;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#059669;">check_circle</span>
+                  <span>광역·기초 조례 자동 교차 대조 완료 (데이터 동기화 기준: 2025. 02. 24 09:30)</span>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+
+          <sc-if value="{{selOrd.showComparisonTable}}" hint-placeholder-val="{{false}}">
+            <section style="background:#fff;border-radius:8px;border:1px solid #E5E7EB;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden;">
+              <div style="background:#F9FAFB;padding:12px 20px;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:18px;color:#1E3A5F;">compare_arrows</span>
+                  <h2 style="font-size:14px;font-weight:700;color:#022448;margin:0;white-space:nowrap;">광역 · 기초 조례 대조 현황</h2>
+                </div>
+                <span style="font-size:12px;color:#6B7280;font-weight:500;flex-shrink:0;">단위 조문 직접 대조 분석</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);">
+                <div style="padding:20px;display:flex;flex-direction:column;gap:12px;border-right:1px solid #E5E7EB;">
+                  <div style="display:flex;flex-direction:column;gap:4px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:#F3F4F6;color:#374151;font-size:12px;font-weight:600;border:1px solid #E5E7EB;">본청</span>
+                      <span style="font-size:12px;color:#6B7280;">광역 자치입법</span>
+                    </div>
+                    <h3 style="font-size:15px;font-weight:700;color:#111827;line-height:1.4;margin:4px 0 0;">{{selOrd.matchedMetropolitanOrdinance.name}}</h3>
+                    <span style="font-size:12px;color:#6B7280;">시행 {{selOrd.matchedMetropolitanOrdinance.enforcementDate}} ⟨{{selOrd.matchedMetropolitanOrdinance.ordinanceNo}}⟩</span>
+                  </div>
+                  <sc-if value="{{selOrd.metroDefinitionTable}}" hint-placeholder-val="{{false}}">
+                    <div style="border:1px solid #E5E7EB;border-radius:4px;overflow:hidden;">
+                      <div style="background:#F9FAFB;padding:6px 12px;border-bottom:1px solid #E5E7EB;font-size:12px;font-weight:600;color:#4B5563;">주요 법정 정의 및 지급 기준</div>
+                      <table style="width:100%;text-align:left;font-size:12px;border-collapse:collapse;">
+                        <tbody>
+                          <tr style="border-bottom:1px solid #F3F4F6;"><th style="width:96px;background:rgba(249,250,251,.7);padding:8px 12px;font-weight:600;color:#4B5563;">목적</th><td style="padding:8px 12px;color:#1F2937;">{{selOrd.metroDefinitionTable.purpose}}</td></tr>
+                          <tr style="border-bottom:1px solid #F3F4F6;"><th style="width:96px;background:rgba(249,250,251,.7);padding:8px 12px;font-weight:600;color:#4B5563;">대상</th><td style="padding:8px 12px;color:#1F2937;">{{selOrd.metroDefinitionTable.target}}</td></tr>
+                          <tr><th style="width:96px;background:rgba(249,250,251,.7);padding:8px 12px;font-weight:600;color:#4B5563;">급여형태</th><td style="padding:8px 12px;color:#1F2937;">{{selOrd.metroDefinitionTable.benefitType}}</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </sc-if>
+                </div>
+                <div style="padding:20px;display:flex;flex-direction:column;gap:12px;background:rgba(249,250,251,.3);">
+                  <div style="display:flex;flex-direction:column;gap:4px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;background:#EFF6FF;color:#1E40AF;font-size:12px;font-weight:600;border:1px solid #BFDBFE;">{{selOrd.region}}</span>
+                      <span style="font-size:12px;color:#6B7280;">기초 자치입법</span>
+                    </div>
+                    <h3 style="font-size:15px;font-weight:700;color:#111827;line-height:1.4;margin:4px 0 0;">{{selOrd.title}}</h3>
+                    <span style="font-size:12px;color:#6B7280;">시행 {{selOrd.enforcementDate}} ⟨{{selOrd.ordinanceNo}}⟩</span>
+                  </div>
+                  <sc-if value="{{selOrd.definitionTable}}" hint-placeholder-val="{{false}}">
+                    <div style="border:1px solid #E5E7EB;border-radius:4px;overflow:hidden;background:#fff;">
+                      <div style="background:#F9FAFB;padding:6px 12px;border-bottom:1px solid #E5E7EB;font-size:12px;font-weight:600;color:#4B5563;">주요 법정 정의 및 지급 기준</div>
+                      <table style="width:100%;text-align:left;font-size:12px;border-collapse:collapse;">
+                        <tbody>
+                          <tr style="border-bottom:1px solid #F3F4F6;"><th style="width:96px;background:rgba(249,250,251,.7);padding:8px 12px;font-weight:600;color:#4B5563;">목적</th><td style="padding:8px 12px;color:#1F2937;">{{selOrd.definitionTable.purpose}}</td></tr>
+                          <tr style="border-bottom:1px solid #F3F4F6;"><th style="width:96px;background:rgba(249,250,251,.7);padding:8px 12px;font-weight:600;color:#4B5563;">대상</th><td style="padding:8px 12px;color:#1F2937;">{{selOrd.definitionTable.target}}</td></tr>
+                          <tr><th style="width:96px;background:rgba(249,250,251,.7);padding:8px 12px;font-weight:600;color:#4B5563;">급여형태</th><td style="padding:8px 12px;color:#1F2937;">{{selOrd.definitionTable.benefitType}}</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{selOrd.showSoloDefinitionTable}}" hint-placeholder-val="{{false}}">
+            <section style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+              <div style="padding:12px 20px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;">
+                <h3 style="font-size:12px;font-weight:700;color:#1F2937;display:flex;align-items:center;gap:6px;margin:0;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#1E3A5F;">fact_check</span>
+                  조례 핵심 규정 개요
+                </h3>
+                <span style="font-size:11px;color:#6B7280;">표준 행정 메타데이터 3개 항목</span>
+              </div>
+              <div style="display:flex;flex-direction:column;font-size:12px;">
+                <div style="display:flex;border-bottom:1px solid #F3F4F6;">
+                  <div style="width:176px;background:rgba(249,250,251,.8);padding:12px;font-weight:600;color:#374151;border-right:1px solid #E5E7EB;flex-shrink:0;">목적</div>
+                  <div style="flex:1;padding:12px;color:#1F2937;line-height:1.6;">{{selOrd.definitionTable.purpose}}</div>
+                </div>
+                <div style="display:flex;border-bottom:1px solid #F3F4F6;">
+                  <div style="width:176px;background:rgba(249,250,251,.8);padding:12px;font-weight:600;color:#374151;border-right:1px solid #E5E7EB;flex-shrink:0;">대상</div>
+                  <div style="flex:1;padding:12px;color:#1F2937;line-height:1.6;">{{selOrd.definitionTable.target}}</div>
+                </div>
+                <div style="display:flex;">
+                  <div style="width:176px;background:rgba(249,250,251,.8);padding:12px;font-weight:600;color:#374151;border-right:1px solid #E5E7EB;flex-shrink:0;">급여형태</div>
+                  <div style="flex:1;padding:12px;color:#1F2937;line-height:1.6;">{{selOrd.definitionTable.benefitType}}</div>
+                </div>
+              </div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{selOrd.evaluationBasis}}" hint-placeholder-val="{{false}}">
+            <section style="background:#fff;border-radius:8px;border:1px solid #E5E7EB;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;gap:16px;">
+              <div style="display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6;padding-bottom:10px;">
+                <span style="font-family:'Material Symbols Outlined';font-size:20px;color:#1E3A5F;">gavel</span>
+                <h2 style="font-size:14px;font-weight:700;color:#022448;margin:0;">판정 근거</h2>
+              </div>
+              <div style="font-size:12px;color:#1F2937;line-height:1.7;display:flex;flex-direction:column;gap:4px;">
+                <sc-for list="{{selOrd.evaluationBasis.description}}" as="line" hint-placeholder-count="2">
+                  <p style="margin:0;">{{line}}</p>
+                </sc-for>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+                <sc-if value="{{selOrd.evaluationBasis.metroQuote}}" hint-placeholder-val="{{false}}">
+                  <blockquote style="border-left:4px solid #1E3A5F;background:#F9FAFB;border-radius:0 4px 4px 0;padding:14px;margin:0;display:flex;flex-direction:column;gap:4px;">
+                    <div style="font-size:12px;color:#1E3A5F;font-weight:700;">{{selOrd.evaluationBasis.metroQuote.title}}</div>
+                    <p style="font-size:12px;color:#374151;line-height:1.6;margin:0;">{{selOrd.evaluationBasis.metroQuote.text}}</p>
+                  </blockquote>
+                </sc-if>
+                <sc-if value="{{selOrd.evaluationBasis.localQuote}}" hint-placeholder-val="{{false}}">
+                  <blockquote style="border-left:4px solid #1E3A5F;background:#F9FAFB;border-radius:0 4px 4px 0;padding:14px;margin:0;display:flex;flex-direction:column;gap:4px;">
+                    <div style="font-size:12px;color:#1E3A5F;font-weight:700;">{{selOrd.evaluationBasis.localQuote.title}}</div>
+                    <p style="font-size:12px;color:#374151;line-height:1.6;margin:0;">{{selOrd.evaluationBasis.localQuote.text}}</p>
+                  </blockquote>
+                </sc-if>
+              </div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{selOrd.priorityRules}}" hint-placeholder-val="{{false}}">
+            <section style="background:#fff;border-radius:8px;border:1px solid #E5E7EB;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6;padding-bottom:10px;">
+                <span style="font-family:'Material Symbols Outlined';font-size:20px;color:#1E3A5F;">rule</span>
+                <h2 style="font-size:14px;font-weight:700;color:#022448;margin:0;">우선순위 조항</h2>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
+                <div style="border:1px solid #E5E7EB;border-radius:4px;padding:14px;background:#F9FAFB;display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E5E7EB;padding-bottom:6px;">
+                    <span style="font-size:12px;font-weight:600;color:#374151;">{{selOrd.priorityRules.metro.title}}</span>
+                    <span style="font-size:11px;color:#6B7280;">{{selOrd.priorityRules.metro.badge}}</span>
+                  </div>
+                  <p style="font-size:12px;color:#1F2937;padding:4px 0;margin:0;">{{selOrd.priorityRules.metro.text}}</p>
+                  <span class="wrap-ok" style="font-size:11px;color:#9CA3AF;margin-top:auto;">{{selOrd.priorityRules.metro.note}}</span>
+                </div>
+                <div style="border:1px solid #E5E7EB;border-radius:4px;padding:14px;background:#fff;display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #E5E7EB;padding-bottom:6px;">
+                    <div style="display:flex;align-items:center;gap:6px;">
+                      <span style="font-size:12px;font-weight:700;color:#1E3A5F;">{{selOrd.priorityRules.local.title}}</span>
+                      <span style="display:inline-flex;align-items:center;padding:2px 6px;border-radius:4px;background:#EFF6FF;color:#1D4ED8;font-size:11px;font-weight:600;border:1px solid #BFDBFE;">{{selOrd.priorityRules.local.clauseTag}}</span>
+                    </div>
+                    <span style="font-size:11px;color:#D97706;font-weight:600;">{{selOrd.priorityRules.local.badge}}</span>
+                  </div>
+                  <p style="font-size:12px;color:#1F2937;line-height:1.6;padding:4px 0 4px 8px;margin:0;border-left:2px solid #1E3A5F;">{{selOrd.priorityRules.local.text}}</p>
+                  <span class="wrap-ok" style="font-size:11px;color:#9CA3AF;margin-top:auto;">{{selOrd.priorityRules.local.note}}</span>
+                </div>
+              </div>
+            </section>
+          </sc-if>
+
+          <sc-if value="{{selOrd.articleSummary}}" hint-placeholder-val="{{false}}">
+            <section style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+              <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F3F4F6;padding-bottom:10px;flex-wrap:wrap;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <h3 style="font-size:14px;font-weight:700;color:#111827;margin:0;">조문 요약</h3>
+                  <span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:#F3F4F6;color:#374151;border:1px solid #E5E7EB;">{{selOrd.articleSummary.countLabel}}</span>
+                </div>
+                <span style="font-size:12px;color:#6B7280;">{{selOrd.articleSummary.subtext}}</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <sc-for list="{{selOrd.articleSummary.articles}}" as="art" hint-placeholder-count="2">
+                  <article style="border-left:4px solid #1E3A5F;background:#F9FAFB;padding:14px;border-radius:0 4px 4px 0;">
+                    <div style="font-size:12px;font-weight:700;color:#1E3A5F;margin-bottom:4px;">{{art.title}}</div>
+                    <p style="font-size:12px;color:#1F2937;line-height:1.6;padding-left:4px;margin:0;">{{art.text}}</p>
+                  </article>
+                </sc-for>
+              </div>
+              <sc-if value="{{selOrd.articleSummary.referenceNote}}" hint-placeholder-val="{{false}}">
+                <div style="margin-top:4px;padding:12px;border-radius:4px;background:rgba(239,246,255,.6);border:1px solid #DBEAFE;display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#4B5563;">
+                  <span style="font-family:'Material Symbols Outlined';font-size:18px;color:#1E3A5F;flex-shrink:0;margin-top:2px;">info</span>
+                  <div style="line-height:1.6;"><strong style="color:#111827;font-weight:600;">참고사항:</strong> {{selOrd.articleSummary.referenceNote}}</div>
+                </div>
+              </sc-if>
+            </section>
+          </sc-if>
+
+          <section style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;border-top:1px solid #E5E7EB;">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <button type="button" onClick="{{backToResults}}" style="height:36px;padding:0 12px;border-radius:4px;background:#fff;border:1px solid #D1D5DB;color:#374151;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">arrow_back</span>
+                <span>검색 결과 목록으로 돌아가기</span>
+              </button>
+              <sc-if value="{{selOrd.showMetroStatuteButton}}" hint-placeholder-val="{{false}}">
+                <button type="button" onClick="{{openStatuteMetro}}" style="height:36px;padding:0 12px;border-radius:4px;background:#fff;border:1px solid #D1D5DB;color:#374151;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+                  <span style="font-family:'Material Symbols Outlined';font-size:16px;">open_in_new</span>
+                  <span>본청 원문 열기</span>
+                </button>
+              </sc-if>
+              <button type="button" onClick="{{openStatuteLocal}}" style="height:36px;padding:0 12px;border-radius:4px;background:#fff;border:1px solid #D1D5DB;color:#374151;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">open_in_new</span>
+                <span>{{selOrd.localStatuteLabel}}</span>
+              </button>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+              <sc-if value="{{copyToast}}" hint-placeholder-val="{{false}}">
+                <span style="font-size:12px;color:#1D4ED8;font-weight:700;">✓ 판정 내용이 클립보드에 복사되었습니다</span>
+              </sc-if>
+              <button type="button" onClick="{{printPage}}" style="height:36px;padding:0 12px;border-radius:4px;background:#fff;border:1px solid #D1D5DB;color:#374151;font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">print</span>
+                <span>출력</span>
+              </button>
+              <button type="button" onClick="{{copyJudgment}}" style="height:36px;padding:0 16px;border-radius:4px;background:#1E3A5F;border:none;color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">content_copy</span>
+                <span>판정 내용 복사</span>
+              </button>
+            </div>
+          </section>
+
+          <section style="width:100%;border-radius:4px;background:#F3F4F6;border:1px solid #E5E7EB;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;">
+            <div style="display:flex;align-items:center;gap:6px;color:#374151;font-size:12px;font-weight:600;">
+              <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#6B7280;">verified_user</span>
+              <span>이 결과는 확정이 아닌 후보 제시입니다. 최종 판단은 담당자가 하십시오.</span>
+            </div>
+            <div style="color:#6B7280;font-size:11px;">지방자치단체 조례 입법 행정 지원 시스템 | 공공행정 표준 업무망 전용 | 국가법령정보센터 Open API 연계 운영 중</div>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isManagement}}" hint-placeholder-val="{{false}}">
+      <div style="width:100%;display:flex;flex-direction:column;flex:1;background:#F8F9FA;">
+        <div style="width:100%;background:#fff;border-bottom:1px solid #E5E7EB;padding:10px 24px;">
+          <div style="max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#6B7280;flex-wrap:wrap;gap:6px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span>{{selectedRegion}}군</span><span style="color:#D1D5DB;">›</span><span style="color:#1E3A5F;font-weight:700;">조례 현황 대시보드</span>
+            </div>
+            <div style="color:#9CA3AF;">최근 분석 일시: 2026. 10. 12 09:30 기준</div>
+          </div>
+        </div>
+
+        <div style="max-width:1440px;width:100%;margin:0 auto;padding:24px;display:flex;flex-direction:column;gap:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div>
+              <h1 style="font-size:22px;font-weight:700;color:#111827;letter-spacing:-0.01em;margin:0;">{{selectedRegion}} — 본청 조례와의 겹침 현황</h1>
+              <p style="font-size:12px;color:#6B7280;margin:4px 0 0;">전남광주통합특별시 신규 조례 대비 관할 자치법규 전수 대조 결과</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" onClick="{{printPage}}" style="height:36px;padding:0 14px;border-radius:4px;background:#fff;border:1px solid #D1D5DB;color:#374151;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">print</span><span>현황 보고서 인쇄</span>
+              </button>
+              <button type="button" onClick="{{exportExcel}}" style="height:36px;padding:0 14px;border-radius:4px;background:#1E3A5F;border:none;color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);">
+                <span style="font-family:'Material Symbols Outlined';font-size:16px;">download</span><span>데이터 엑셀 내려받기</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+            <div style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;">
+              <span style="font-size:12px;color:#6B7280;font-weight:500;">검토 대상 조례</span>
+              <div style="margin-top:8px;font-size:30px;font-weight:800;color:#111827;letter-spacing:-0.01em;">{{overviewStats.totalReviewed}}<span style="font-size:16px;font-weight:400;color:#6B7280;margin-left:4px;">건</span></div>
+              <span style="font-size:11px;color:#9CA3AF;margin-top:8px;">전체 자치법규 전수조사</span>
+            </div>
+            <div style="background:#fff;border:1px solid #DBEAFE;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;">
+              <span class="nowrap-label" style="font-size:12px;color:#1E3A8A;font-weight:500;">겹침 후보</span>
+              <div style="margin-top:8px;font-size:30px;font-weight:800;color:#1E3A5F;letter-spacing:-0.01em;">{{overviewStats.overlapCandidates}}<span style="font-size:16px;font-weight:400;color:#1E40AF;margin-left:4px;">건</span></div>
+              <span style="font-size:11px;color:#1E40AF;margin-top:8px;">유사 목적 및 수혜 범위 중복</span>
+            </div>
+            <div style="background:#fff;border:1px solid #FDE68A;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;">
+              <span class="nowrap-label" style="font-size:12px;color:#92400E;font-weight:500;">확인 필요</span>
+              <div style="margin-top:8px;font-size:30px;font-weight:800;color:#D97706;letter-spacing:-0.01em;">{{overviewStats.needCheck}}<span style="font-size:16px;font-weight:400;color:#B45309;margin-left:4px;">건</span></div>
+              <span style="font-size:11px;color:#B45309;margin-top:8px;">조문 상충 및 법제해석 필요</span>
+            </div>
+          </div>
+
+          <section style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F3F4F6;padding-bottom:12px;flex-wrap:wrap;gap:6px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-family:'Material Symbols Outlined';font-size:20px;color:#D97706;">priority_high</span>
+                <h2 style="font-size:14px;font-weight:700;color:#111827;margin:0;">확인 필요 항목 <span style="font-size:12px;font-weight:400;color:#6B7280;">(총 {{overviewStats.needCheck}}건 중 중점 검토 3건)</span></h2>
+              </div>
+              <span style="font-size:12px;color:#B45309;font-weight:500;">조례정비 권고대상</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+              <sc-for list="{{attentionItems}}" as="a" hint-placeholder-count="3">
+                <div onClick="{{a.onClick}}" style="background:rgba(255,251,235,.3);border:1px solid #FDE68A;border-radius:8px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;">
+                  <div style="display:flex;flex-direction:column;gap:8px;">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                      <span style="font-size:12px;font-weight:700;color:#111827;">{{a.title}}</span>
+                      <span style="flex-shrink:0;font-size:11px;font-family:ui-monospace,monospace;color:#9CA3AF;">{{a.department}}</span>
+                    </div>
+                    <p style="font-size:12px;color:#4B5563;line-height:1.6;margin:0;">{{a.description}}</p>
+                  </div>
+                  <div style="margin-top:16px;padding-top:10px;border-top:1px solid rgba(253,230,138,.6);display:flex;align-items:center;justify-content:space-between;gap:6px;">
+                    <span style="font-size:11px;font-weight:600;color:#92400E;">{{a.warningBadge}}</span>
+                    <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#B45309;flex-shrink:0;">arrow_forward</span>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </section>
+
+          <section style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden;">
+            <div style="padding:14px 20px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;">
+              <h2 style="font-size:14px;font-weight:700;color:#022448;display:flex;align-items:center;gap:6px;margin:0;">
+                <span style="font-family:'Material Symbols Outlined';font-size:18px;color:#1E3A5F;">table_chart</span>
+                분야별 겹침
+              </h2>
+              <span style="font-size:12px;color:#6B7280;flex-shrink:0;">전체 455건 중 대조 분석 표</span>
+            </div>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;text-align:left;font-size:12px;border-collapse:collapse;">
+                <thead style="background:rgba(249,250,251,.8);border-bottom:1px solid #E5E7EB;color:#4B5563;font-weight:600;">
+                  <tr>
+                    <th style="padding:12px 16px;width:112px;">분야</th>
+                    <th style="padding:12px 16px;">본청 조례 (광역)</th>
+                    <th style="padding:12px 16px;">장흥 조례 (기초)</th>
+                    <th style="padding:12px 16px;width:96px;text-align:center;">판정</th>
+                    <th style="padding:12px 16px;width:112px;text-align:right;">상세</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <sc-for list="{{categoryOverlaps}}" as="row" hint-placeholder-count="5">
+                    <tr style="border-bottom:1px solid #F3F4F6;">
+                      <td style="padding:14px 16px;font-weight:600;color:#374151;">{{row.category}}</td>
+                      <td style="padding:14px 16px;">
+                        <div style="font-weight:600;color:#111827;">{{row.metroTitle}}</div>
+                        <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">{{row.metroMeta}}</div>
+                      </td>
+                      <td style="padding:14px 16px;">
+                        <div style="font-weight:600;color:#111827;">{{row.localTitle}}</div>
+                        <div style="font-size:11px;color:#9CA3AF;margin-top:2px;">{{row.localMeta}}</div>
+                      </td>
+                      <td style="padding:14px 16px;text-align:center;">
+                        <span class="nowrap-label" style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;font-size:11px;font-weight:600;background:{{row.badgeBg}};color:{{row.badgeColor}};border:1px solid {{row.badgeBorder}};">{{row.statusLabel}}</span>
+                      </td>
+                      <td style="padding:14px 16px;text-align:right;">
+                        <button type="button" onClick="{{row.onClick}}" style="background:none;border:none;display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#1E3A5F;font-weight:600;cursor:pointer;text-decoration:underline;">
+                          <span>대조 분석</span><span style="font-family:'Material Symbols Outlined';font-size:14px;text-decoration:none;">arrow_forward</span>
+                        </button>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section style="width:100%;border-radius:4px;background:#F3F4F6;border:1px solid #E5E7EB;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;">
+            <div style="display:flex;align-items:center;gap:6px;color:#374151;font-size:12px;font-weight:600;">
+              <span style="font-family:'Material Symbols Outlined';font-size:16px;color:#6B7280;">verified_user</span>
+              <span>이 결과는 확정이 아닌 후보 제시입니다. 최종 판단은 담당자가 하십시오.</span>
+            </div>
+            <div style="color:#6B7280;font-size:11px;">지방자치단체 조례 입법 행정 지원 시스템 | 공공행정 표준 업무망 전용 | 국가법령정보센터 Open API 연계 운영 중</div>
+          </section>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isHistory}}" hint-placeholder-val="{{false}}">
+      <div style="width:100%;display:flex;flex-direction:column;flex:1;background:#F8F9FA;">
+        <div style="width:100%;background:#fff;border-bottom:1px solid #E5E7EB;padding:10px 24px;">
+          <div style="max-width:1440px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#6B7280;flex-wrap:wrap;gap:6px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span>법령·조례 연혁</span><span style="color:#D1D5DB;">›</span><span style="color:#1E3A5F;font-weight:700;">광역 자치법규 제·개정 타임라인</span>
+            </div>
+            <div style="color:#9CA3AF;">연계 기관: 법제처 국가법령정보센터</div>
+          </div>
+        </div>
+        <div style="max-width:900px;width:100%;margin:0 auto;padding:32px 24px;display:flex;flex-direction:column;gap:24px;">
+          <div>
+            <h1 style="font-size:22px;font-weight:700;color:#111827;letter-spacing:-0.01em;margin:0;">광역·기초 자치법규 제·개정 연혁</h1>
+            <p style="font-size:12px;color:#4B5563;margin:4px 0 0;">전남광주통합특별시 출범 및 광역 조례 제정에 따른 각 기초지자체 조례의 개정 이력과 정합성 검토 기록입니다.</p>
+          </div>
+          <div style="position:relative;border-left:2px solid #E5E7EB;margin-left:16px;padding-left:24px;display:flex;flex-direction:column;gap:24px;padding-top:8px;padding-bottom:8px;">
+            <sc-for list="{{timelineEvents}}" as="evt" hint-placeholder-count="5">
+              <div style="position:relative;">
+                <div style="position:absolute;left:-31px;top:6px;width:14px;height:14px;border-radius:9999px;background:#fff;border:2px solid #1E3A5F;"></div>
+                <div style="background:#fff;border:1px solid #E5E7EB;border-radius:8px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.03);display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span style="font-size:12px;font-weight:700;color:#6B7280;font-family:ui-monospace,monospace;">{{evt.date}}</span>
+                      <span style="color:#D1D5DB;">·</span>
+                      <span style="font-size:12px;color:#4B5563;">{{evt.category}}</span>
+                    </div>
+                    <span class="nowrap-label" style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;background:{{evt.badgeBg}};color:{{evt.badgeColor}};border:1px solid {{evt.badgeBorder}};">{{evt.badge}}</span>
+                  </div>
+                  <h3 style="font-size:14px;font-weight:700;color:#111827;margin:0;">{{evt.title}}</h3>
+                  <p style="font-size:12px;color:#4B5563;line-height:1.6;margin:0;">{{evt.description}}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <footer style="width:100%;background:#fff;border-top:1px solid #E5E7EB;padding:12px 0;font-size:12px;color:#6B7280;margin-top:auto;">
+    <div style="max-width:1440px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span>지방자치단체 조례 입법 행정 지원 시스템</span>
+        <span style="color:#D1D5DB;">|</span>
+        <span style="color:#4B5563;">공공행정 표준 업무망 전용</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="display:inline-block;width:6px;height:6px;border-radius:9999px;background:#059669;"></span>
+        <span>국가법령정보센터 Open API 연계 운영 중</span>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{statuteOpen}}" hint-placeholder-val="{{false}}">
+    <div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.5);backdrop-filter:blur(2px);">
+      <div style="background:#fff;border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.25);max-width:640px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid #E5E7EB;">
+        <div style="padding:16px 24px;background:#1E3A5F;color:#fff;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-family:'Material Symbols Outlined';font-size:20px;">menu_book</span>
+            <div>
+              <span style="font-size:11px;color:#BFDBFE;display:block;">{{statuteTypeLabel}}</span>
+              <h2 style="font-size:15px;font-weight:700;color:#fff;margin:0;">{{statuteTitle}}</h2>
+            </div>
+          </div>
+          <button onClick="{{closeStatute}}" style="background:none;border:none;color:#BFDBFE;cursor:pointer;padding:4px;">
+            <span style="font-family:'Material Symbols Outlined';font-size:20px;">close</span>
+          </button>
+        </div>
+        <div style="padding:8px 24px;background:#F9FAFB;border-bottom:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#6B7280;">
+          <span>제정 및 공포: 법제처 국가법령정보센터 표준 조례안 원본</span>
+          <span style="color:#047857;font-weight:600;display:flex;align-items:center;gap:4px;">
+            <span style="width:6px;height:6px;border-radius:9999px;background:#059669;display:inline-block;"></span>
+            현행 조례
+          </span>
+        </div>
+        <div style="padding:24px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;font-size:12px;color:#1F2937;line-height:1.6;">
+          <div style="text-align:center;font-weight:700;font-size:14px;color:#111827;padding-bottom:8px;border-bottom:1px solid #E5E7EB;">{{statuteTitle}}</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <h4 style="font-weight:700;color:#111827;font-size:12px;margin:0;">제1조(목적)</h4>
+            <p style="color:#374151;padding-left:8px;margin:0;">이 조례는 관할 구역 내 주민의 보편적 기본생활을 보장하고 지역경제의 지속가능한 선순환 체계를 구축함을 목적으로 한다.</p>
+          </div>
+          <div style="background:rgba(255,251,235,.5);padding:10px;border-radius:4px;border:1px solid #FDE68A;display:flex;flex-direction:column;gap:4px;">
+            <h4 style="font-weight:700;color:#92400E;font-size:12px;display:flex;align-items:center;gap:4px;margin:0;">
+              <span style="font-family:'Material Symbols Outlined';font-size:15px;">priority_high</span>
+              제4조(다른 조례와의 관계)
+            </h4>
+            <p style="color:#1F2937;padding-left:8px;margin:0;">기본소득 지급 및 소득안정 지원에 관하여 다른 법령 및 조례에 특별한 규정이 있는 경우를 제외하고는 이 조례를 우선 적용한다.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <h4 style="font-weight:700;color:#111827;font-size:12px;margin:0;">제5조(지급 대상 및 요건)</h4>
+            <p style="color:#374151;padding-left:8px;margin:0;">① 군수는 관내에 주민등록을 두고 계속하여 1년 이상 실제 거주하고 있는 주민에게 기본소득을 지급할 수 있다.</p>
+            <p style="color:#374151;padding-left:8px;margin:0;">② 제1항에 따른 거주요건의 산정 기준일 및 확인 방법은 규칙으로 정한다.</p>
+          </div>
+          <div style="background:rgba(255,251,235,.5);padding:10px;border-radius:4px;border:1px solid #FDE68A;display:flex;flex-direction:column;gap:4px;">
+            <h4 style="font-weight:700;color:#92400E;font-size:12px;display:flex;align-items:center;gap:4px;margin:0;">
+              <span style="font-family:'Material Symbols Outlined';font-size:15px;">priority_high</span>
+              제8조(지원사업의 연계 및 우선적용)
+            </h4>
+            <p style="color:#1F2937;padding-left:8px;margin:0;">① 군수는 중앙행정기관 또는 광역자치단체와 연계하여 소득보전 사업을 추진할 수 있다.</p>
+            <p style="color:#1F2937;padding-left:8px;font-weight:600;margin:0;">③ 국가 또는 전남광주통합특별시에서 기본소득 관련 사업을 추진하는 경우에는 해당 사업의 기준과 절차를 우선 적용할 수 있다. ⟨개정 2026. 8. 10.⟩</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <h4 style="font-weight:700;color:#111827;font-size:12px;margin:0;">제12조(부정수급에 대한 환수)</h4>
+            <p style="color:#374151;padding-left:8px;margin:0;">거짓이나 그 밖의 부정한 방법으로 지원금을 지급받은 사실이 확인된 때에는 지급을 중단하고 이미 지급된 금액을 전액 환수하여야 한다.</p>
+          </div>
+        </div>
+        <div style="padding:12px 24px;background:#F9FAFB;border-top:1px solid #E5E7EB;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:11px;color:#6B7280;">문서번호: {{statuteDocNo}}</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button onClick="{{printPage}}" style="padding:6px 12px;border-radius:4px;background:#fff;border:1px solid #D1D5DB;color:#374151;font-size:12px;font-weight:500;cursor:pointer;">원문 인쇄</button>
+            <button onClick="{{closeStatute}}" style="padding:6px 12px;border-radius:4px;background:#1E3A5F;border:none;color:#fff;font-size:12px;font-weight:600;cursor:pointer;">닫기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  static REGIONS = [
+    { id: '본청', name: '본청', fullName: '본청 (전남광주통합특별시)', type: '광역', totalCount: 366 },
+    { id: '북구', name: '광주 북구', fullName: '광주 북구', type: '기초', totalCount: 512 },
+    { id: '여수', name: '여수시', fullName: '여수시', type: '기초', totalCount: 620 },
+    { id: '장흥', name: '장흥군', fullName: '장흥군', type: '기초', totalCount: 455 },
+    { id: '해남', name: '해남군', fullName: '해남군', type: '기초', totalCount: 480 },
+    { id: '목포', name: '목포시', fullName: '목포시', type: '기초', totalCount: 520 },
+  ];
+
+  static PORTAL_REGIONS = [
+    { id: '본청', label: '본청(전남광주통합특별시)' },
+    { id: '북구', label: '북구' },
+    { id: '여수', label: '여수' },
+    { id: '장흥', label: '장흥' },
+    { id: '해남', label: '해남' },
+    { id: '목포', label: '목포' },
+  ];
+
+  static RECOMMENDED_TAGS = ['농어민 공익수당', '청년 주거지원', '소상공인 육성', '공공시설 개방'];
+  static SUGGESTION_WORDS = ['기본소득', '지원금', '농어민'];
+
+  static ORDINANCE_ITEMS = [
+    {
+      id: 'ORD-2026-JH-0419', ordinanceNo: '조례 제2418호', title: '장흥군 기본소득 지급 조례', region: '장흥', category: '기본소득',
+      status: 'need_check', statusLabel: '확인 필요', enactmentDate: '2020. 08. 14', enforcementDate: '2024. 03. 12',
+      department: '기획예산실', team: '정책개발팀', summary: '장흥군민의 기본생활 보장 및 지역경제 순환 활성화를 위한 기본소득 정기 지급 기준',
+      relevanceScore: 98, matchedArticlesCount: 6, lastSyncDate: '2026. 10. 12 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 농어촌 기본소득 기본조례', ordinanceNo: '조례 제102호', enforcementDate: '2026. 07. 01', note: '광역 자치법규 조문과 지원 자격 요건 중복 심사 (거주요건 및 소득 지급 기준 경합)' },
+      hasInternalConflict: true,
+      conflictDetails: {
+        title: '한 조례 안에서 우선순위 조문이 서로 충돌합니다',
+        clauseA: { tag: '제4조 — 이 조례가 우선', label: '본조 전문', text: '"기본소득 지급에 관하여 다른 조례에 특별한 규정이 있는 경우를 제외하고는 이 조례를 우선 적용한다."' },
+        clauseB: { tag: '제8조③ — 상위 사업이 우선 ⟨개정 2026.8.10.⟩', label: '제3항 단서', text: '"국가 또는 전남광주통합특별시에서 기본소득 관련 사업을 추진하는 경우에는 해당 사업의 기준과 절차를 우선 적용할 수 있다."' },
+        note: '두 조문 중 무엇이 우선하는지는 조문만으로 판단되지 않아 자동 판정하지 않았습니다.',
+      },
+      metroDefinitionTable: { purpose: '농어촌 주민의 기본적 생활 안정 및 도농 균형발전 도모', target: '전남광주통합특별시 관내 농어촌 지역 1년 이상 계속 거주 주민', benefitType: '분기별 30만원 상당 지역화폐 또는 계좌 입금' },
+      definitionTable: { purpose: '장흥군민의 기본생활 보장 및 지역경제 순환 활성화', target: '장흥군에 주민등록을 두고 실제 거주하는 군민 (농어민·청년 우선)', benefitType: '월 5만원 장흥정남진상품권 지급' },
+      evaluationBasis: {
+        description: [
+          '본청 조례와 장흥군 조례 모두 주민을 대상으로 한 기본소득 지급 사무를 규정하고 있어 사무 범위 및 예산 매칭에 관한 중복 적용 검토가 필요합니다.',
+          '특히 지급 대상 거주 요건과 수급 기준에서 상위 광역 조례와 기초 자치조례 간 경합 소지가 발견되었습니다.',
+        ],
+        metroQuote: { title: '본청 제2조 (기본이념 및 적용범위)', text: '"「전남광주통합특별시 농어촌 기본소득 기본조례」 제2조: 본 조례는 통합특별시 관내 전 지역의 농어촌 정주 여건 개선을 위한 최소 소득 보장 원칙을 확립하며, 각 자치구·군에서 개별 추진하는 소득 지원 사업의 기준 설정 근거가 된다."' },
+        localQuote: { title: '장흥 제3조 (군민의 권리 및 책무)', text: '"「장흥군 기본소득 지급 조례」 제3조: 군수는 모든 군민이 인간다운 생활을 영위할 수 있도록 자체 재원을 확충하여 기본소득을 정기적으로 지급할 책무를 진다."' },
+      },
+      priorityRules: {
+        metro: { title: '본청 규정 체계', badge: '배제 규정 유무', text: '해당 조항 없음 (별도의 하위 자치단체 조례 우선 적용 배제 규정 없음)', note: '* 상위 조례 내 기초지자체 특례 위임 조항 미기재' },
+        local: { title: '장흥군 조례', clauseTag: '제8조③', badge: '상위 사업 기준 우선 적용 가능', text: '"국가 또는 전남광주통합특별시에서 기본소득 관련 사업을 추진하는 경우에는 해당 사업의 기준과 절차를 우선 적용할 수 있다."', note: '* 자치단체장 재량에 따른 상위 지침 준용 가능 문언' },
+      },
+    },
+    {
+      id: 'ORD-2024-JH-2842', ordinanceNo: '조례 제2842호', title: '장흥군 농어민 공익수당 및 기본소득 지원 조례', region: '장흥', category: '기본소득',
+      status: 'overlap_candidate', statusLabel: '겹침 후보', enactmentDate: '2021. 04. 10', enforcementDate: '2024. 01. 01',
+      department: '농산유통과', team: '농정기획팀', summary: '농어가 기본소득 지급 대상 선정 및 정기 수당 지원에 관한 지급 자격 요건 규정',
+      relevanceScore: 95, matchedArticlesCount: 5, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 농어촌 기본소득 기본조례', ordinanceNo: '조례 제102호', enforcementDate: '2024. 10. 18', note: '제4조 지원자격 중복 검토 대상: 거주 기간 1년 이상 조건 및 소득분위 산출 방식 동일' },
+      metroDefinitionTable: { purpose: '농어업의 공익적 기능 증진 및 농어가 소득안정 도모', target: '광역 관내 거주 농어업경영체 등록 농어가', benefitType: '연 60만원 상당 지역사랑상품권' },
+      definitionTable: { purpose: '장흥군 농어민 공익수당 지급을 통한 지속가능한 농업환경 조성', target: '장흥군 내 1년 이상 주소를 둔 농어업 경영주', benefitType: '연 60만원 장흥정남진상품권 분할 지급' },
+      evaluationBasis: {
+        description: ['본청의 광역 농어민 수당 조례와 장흥군의 기초 조례 지급 대상 및 제외 요건이 거의 동일하여 중복 수급 배제 협의가 필요합니다.'],
+        metroQuote: { title: '본청 제4조 (수급자격 제한)', text: '"농업 외 종합소득금액 3,700만원 이상인 자 및 보조금 부정수급자는 지급 대상에서 제외한다."' },
+        localQuote: { title: '장흥 제5조 (지급 제외)', text: '"동일 가구 내 1인 한정 및 농업 외 소득 3,700만원 초과자는 지원 대상에서 제외한다."' },
+      },
+    },
+    {
+      id: 'ORD-2023-JH-2789', ordinanceNo: '조례 제2789호', title: '장흥군 청년 기본소득 지급 조례', region: '장흥', category: '청년',
+      status: 'overlap_candidate', statusLabel: '겹침 후보', enactmentDate: '2020. 12. 15', enforcementDate: '2023. 09. 15',
+      department: '인구청년정책과', team: '청년일자리팀', summary: '만 19세~34세 미취업 청년에 대한 자립 및 기본생활 보장을 위한 정기 급여 지급 기준',
+      relevanceScore: 92, matchedArticlesCount: 4, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 청년 참여 및 기본소득 보장 조례', ordinanceNo: '조례 제77호', enforcementDate: '2024. 08. 01', note: '지급 대상 연령 및 거주요건 겹침: 제6조 지급기준액 중복 수급 방지 협의 조항 부재' },
+      metroDefinitionTable: { purpose: '청년의 사회적 기본권 보장 및 사회참여 기회 확대', target: '관내 만 19세 이상 34세 이하 청년', benefitType: '분기별 25만원 모바일 청년수당' },
+      definitionTable: { purpose: '장흥군 거주 청년의 지역 정착 및 경제적 자립 기반 마련', target: '장흥군에 연속 1년 이상 거주 중인 만 19세~34세 청년', benefitType: '반기별 50만원 지역화폐 지급' },
+    },
+    {
+      id: 'ORD-2022-JH-2650', ordinanceNo: '조례 제2650호', title: '장흥군 취약계층 생활안정 지원 기본조례', region: '장흥', category: '저소득주민 생활안정',
+      status: 'need_check', statusLabel: '확인 필요', enactmentDate: '2018. 06. 20', enforcementDate: '2022. 12. 30',
+      department: '주민복지과', team: '복지행정팀', summary: '재난 및 긴급 위기상황 발생 시 취약계층 기본 생계비 차등 지원 및 현금성 바우처 지급',
+      relevanceScore: 89, matchedArticlesCount: 3, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 사회보장 증진 및 긴급지원 기본조례', ordinanceNo: '조례 제89호', enforcementDate: '2024. 09. 30', note: '지원 대상 소득인정액 상충 여부 확인: 기준 중위소득 50% vs 65% 산정 기준 법제해석 필요' },
+      metroDefinitionTable: { purpose: '사회보장 사각지대 해소 및 긴급 위기가구 긴급 생계비 지원', target: '기준 중위소득 50% 이하 가구', benefitType: '가구원 수별 현금 지급 (월 최대 130만원)' },
+      definitionTable: { purpose: '장흥군 저소득 취약계층의 최저생활 보장 및 일시적 위기 극복', target: '기준 중위소득 65% 이하 관내 등록 가구', benefitType: '월 30만원 상당 생계비 및 긴급 바우처' },
+    },
+    {
+      id: 'ORD-2019-JHG-2310', ordinanceNo: '조례 제2310호', title: '장흥군 마을버스 운영 지원 조례', region: '장흥', category: '교통',
+      status: 'no_overlap', statusLabel: '겹침 없음', enactmentDate: '2019. 11. 15', enforcementDate: '2019. 11. 15',
+      department: '건설교통과', team: '대중교통팀', summary: '대중교통 소외지역 주민의 이동권 보장 및 공공형 마을버스 운송사업자의 안정적 재정 지원 규정',
+      relevanceScore: 78, matchedArticlesCount: 0, lastSyncDate: '2025. 02. 24 09:30',
+      noOverlapReason: '현재 본청 신규 제정 조례 366건 중 같은 취지로 판정된 조례가 없습니다. 겹치는 기준이 없다는 것도 확인된 정보입니다.',
+      definitionTable: { purpose: '대중교통 소외지역 주민의 이동권 보장 및 공공형 마을버스 운송사업자의 안정적 재정 지원 규정', target: '장흥군 관내 여객자동차운송사업 면허를 취득하고 마을버스를 운행하는 한정면허 운송사업자', benefitType: '운행 손실액 및 인건비·유류비 등 운영비의 일부를 예산 범위 내 군비 직접 보조 (현금 보조금 교부)' },
+      articleSummary: {
+        countLabel: '주요 조항 2건', subtext: '고유 자치사무 영역으로 상위 광역 조례와의 충돌 요소가 없는 조항입니다.',
+        articles: [
+          { title: '장흥 제4조 (재정지원 대상 및 기준)', text: '"군수는 노선 수익성이 없어 운송사업자가 운행을 기피하는 교통 취약지역 노선에 대하여 예산의 범위에서 운행에 필요한 비용의 전부 또는 일부를 지원할 수 있다."' },
+          { title: '장흥 제7조 (지원금의 정산 및 반환)', text: '"보조금을 교부받은 사업자는 매 분기 종료 후 30일 이내에 정산 보고서를 제출하여야 하며, 부정한 방법으로 지원을 받은 경우 즉시 환수 조치한다."' },
+        ],
+        referenceNote: '전라남도 대중교통 육성 및 재정지원 조례(광역)는 시외버스 및 농어촌버스 운송사업 일반 지원을 포괄하고 있으나, 본 조례는 기초 자치사무인 관내 \'마을버스 한정면허 운영 보조\'에 한정되므로 교차 법적 저촉이 발생하지 않습니다.',
+      },
+    },
+    {
+      id: 'ORD-2021-JH-2511', ordinanceNo: '조례 제2511호', title: '장흥군 탐진강 보전 및 생태자원 관리 조례', region: '장흥', category: '환경',
+      status: 'no_overlap', statusLabel: '겹침 없음', enactmentDate: '2021. 05. 20', enforcementDate: '2021. 05. 20',
+      department: '환경관리과', team: '수질보전팀', summary: '탐진강 유역 생태하천 정비 사업 및 지역 특성화 수자원 관리 기금 운용',
+      relevanceScore: 75, matchedArticlesCount: 0, lastSyncDate: '2025. 02. 24 09:30',
+      noOverlapReason: '본청과 겹치는 조례 없음 (고유 자치사무 영역으로 확인)',
+      definitionTable: { purpose: '탐진강의 수생태계 건강성 회복과 친환경 수변공간의 효율적 관리', target: '장흥군 관내 탐진강 유역 관리 대상 구역', benefitType: '수생태계 보전 활동 단체 지원 및 환경 정화 지원금' },
+    },
+    {
+      id: 'ORD-2020-JH-2405', ordinanceNo: '조례 제2405호', title: '장흥군 문학특구 육성 및 천관산 문학관 운영 조례', region: '장흥', category: '문화',
+      status: 'no_overlap', statusLabel: '겹침 없음', enactmentDate: '2020. 11. 10', enforcementDate: '2020. 11. 10',
+      department: '문화관광과', team: '문학예술팀', summary: '문학관 시설 대관 및 문학인 지원 프로그램 운영 관련 자체 규정',
+      relevanceScore: 70, matchedArticlesCount: 0, lastSyncDate: '2025. 02. 24 09:30',
+      noOverlapReason: '본청과 겹치는 조례 없음 (장흥군 고유 문화진흥 구역 사업)',
+    },
+    {
+      id: 'ORD-2023-JH-2680', ordinanceNo: '조례 제2680호', title: '장흥군 귀농어·귀촌 활성화 및 지원 조례', region: '장흥', category: '귀농어·귀촌',
+      status: 'need_check', statusLabel: '확인 필요', enactmentDate: '2019. 03. 15', enforcementDate: '2023. 04. 10',
+      department: '농산유통과', team: '귀농귀촌팀', summary: '귀농어업인 및 귀촌인의 안정적인 농어촌 정착을 위한 이주정착금 및 농지 임대료 지원',
+      relevanceScore: 91, matchedArticlesCount: 4, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 귀농어·귀촌 활성화 및 지원 조례', ordinanceNo: '조례 제112호', enforcementDate: '2024. 11. 15', note: '광역 지원 조례(제112호) 제12조 정착 장려금과 기초 조례 제9조 사업비 중복 수급 배제 조항 충돌 (지원 대상 거주 기간 및 정착자금 교부 한도 상충)' },
+      metroDefinitionTable: { purpose: '도시민의 농어촌 유치 촉진 및 지속가능한 농어촌 공동체 구현', target: '타 시·도에서 전입하여 1년 이상 농어업 종사자', benefitType: '세대당 최대 500만원 정착장려금 및 주택수리비' },
+      definitionTable: { purpose: '장흥군 유입 귀농어·귀촌인의 조기 영농 정착 및 삶의 질 향상', target: '장흥군 전입 5년 이내 실거주 세대주', benefitType: '정착지원금 세대당 600만원 + 빈집 리모델링 500만원' },
+    },
+    {
+      id: 'ORD-2021-JH-2510', ordinanceNo: '조례 제2510호', title: '장흥군 여성농어업인 행복바우처 지원 조례', region: '장흥', category: '여성농어업인',
+      status: 'overlap_candidate', statusLabel: '겹침 후보', enactmentDate: '2017. 05. 10', enforcementDate: '2021. 06. 15',
+      department: '농산유통과', team: '농정기획팀', summary: '여성농어업인의 건강관리 및 문화·복지 활동을 지원하기 위한 행복바우처 카드 발급',
+      relevanceScore: 88, matchedArticlesCount: 3, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 여성농어업인 육성 및 지원 조례', ordinanceNo: '조례 제145호', enforcementDate: '2024. 12. 20', note: '광역 조례의 여성농어업인 복지이용권과 지원 한도액(연 20만원) 및 도·군 매칭 비율 일치 여부 검토 필요' },
+    },
+    {
+      id: 'ORD-2022-JH-2590', ordinanceNo: '조례 제2590호', title: '장흥군 소상공인 지원 및 골목상권 활성화 조례', region: '장흥', category: '경제',
+      status: 'overlap_candidate', statusLabel: '겹침 후보', enactmentDate: '2020. 02. 12', enforcementDate: '2022. 07. 01',
+      department: '지역경제과', team: '상권활성화팀', summary: '관내 소상공인 이차보전금 지원 및 전통시장 환경 개선 사업',
+      relevanceScore: 84, matchedArticlesCount: 2, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 소상공인 보호 및 지원 조례', ordinanceNo: '조례 제65호', enforcementDate: '2024. 05. 20', note: '금융이자 이차보전 지원율(광역 2% vs 군 3%) 상한 준용 여부' },
+    },
+    {
+      id: 'ORD-2018-JH-2350', ordinanceNo: '조례 제2350호', title: '장흥군 공공시설 개방 및 이용 활성화 조례', region: '장흥', category: '행정',
+      status: 'no_overlap', statusLabel: '겹침 없음', enactmentDate: '2018. 09. 10', enforcementDate: '2018. 09. 10',
+      department: '총무과', team: '청사관리팀', summary: '군 청사 및 읍·면 행정복지센터 회의실 등 유휴 공공시설 군민 개방 및 대관 규정',
+      relevanceScore: 72, matchedArticlesCount: 0, lastSyncDate: '2025. 02. 24 09:30',
+      noOverlapReason: '장흥군 관할 공공청사 이용 규정으로 고유 관리사무에 해당',
+    },
+    {
+      id: 'ORD-2023-JH-2710', ordinanceNo: '조례 제2710호', title: '장흥군 청년 주거비 지원 조례', region: '장흥', category: '청년',
+      status: 'overlap_candidate', statusLabel: '겹침 후보', enactmentDate: '2022. 10. 15', enforcementDate: '2023. 03. 01',
+      department: '인구청년정책과', team: '청년일자리팀', summary: '청년 1인 가구 월세 한시 특별지원 및 주거 안정 바우처',
+      relevanceScore: 86, matchedArticlesCount: 2, lastSyncDate: '2025. 02. 24 09:30',
+      matchedMetropolitanOrdinance: { name: '전남광주통합특별시 청년 주거 안정 지원 조례', ordinanceNo: '조례 제80호', enforcementDate: '2024. 08. 15', note: '월세 보조액 중복 지급 제한 규정에 따른 소득 기준 조정 필요' },
+    },
+    { id: 'ORD-2024-BK-1102', ordinanceNo: '조례 제1920호', title: '광주광역시 북구 청년 문화예술 활동 지원 조례', region: '북구', category: '청년', status: 'overlap_candidate', statusLabel: '겹침 후보', enforcementDate: '2024. 02. 01', department: '청년미래과', team: '청년정책팀', summary: '북구 거주 청년 예술인의 창작 활동비 및 전시 공간 임차료 지원' },
+    { id: 'ORD-2024-YS-3310', ordinanceNo: '조례 제3110호', title: '여수시 해양관광 활성화 및 수산자원 육성 조례', region: '여수', category: '해양', status: 'no_overlap', statusLabel: '겹침 없음', enforcementDate: '2024. 01. 15', department: '해양항만레저과', team: '해양관광팀', summary: '여수항 및 연안 도서지역 해양레저 특구 조성 및 어업인 소득 보전' },
+    { id: 'ORD-2024-HN-4401', ordinanceNo: '조례 제2750호', title: '해남군 친환경 농업 육성 및 지원 조례', region: '해남', category: '농림', status: 'need_check', statusLabel: '확인 필요', enforcementDate: '2024. 03. 20', department: '농업기술센터', team: '친환경농업팀', summary: '유기농 인증 농가에 대한 장려금 지급 및 광역 지원금과의 분담 비율' },
+    { id: 'ORD-2024-MP-5120', ordinanceNo: '조례 제2980호', title: '목포시 근대역사문화공간 보전 및 활용 조례', region: '목포', category: '문화', status: 'no_overlap', statusLabel: '겹침 없음', enforcementDate: '2023. 11. 10', department: '도시재생과', team: '역사문화팀', summary: '원도심 근대문화유산 등록 건축물 보수비 지원 및 거리 조성' },
+    { id: 'ORD-2024-HQ-0102', ordinanceNo: '조례 제102호', title: '전남광주통합특별시 농어촌 기본소득 기본조례', region: '본청', category: '기본소득', status: 'need_check', statusLabel: '확인 필요', enforcementDate: '2026. 07. 01', department: '농정기획관', team: '농어촌복지과', summary: '광역 통합특별시 관내 전 지역 농어촌 주민 최소 소득 보장 기준 조례' },
+  ];
+
+  static OVERVIEW_STATS = {
+    totalReviewed: 455, overlapCandidates: 38, needCheck: 6,
+    attentionItems: [
+      { title: '장흥군 기본소득 지급 조례', ordinanceNo: '조례 제2418호', department: '기획예산실', description: '광역 자치법규(전남광주통합특별시 농어촌 기본소득 기본조례 제102호) 조문과 지원 자격 요건 중복 심사', warningBadge: '조례 내 우선순위 조문 상충 (제4조 vs 제8조③)', targetId: 'ORD-2026-JH-0419' },
+      { title: '장흥군 취약계층 생활안정 지원 기본조례', ordinanceNo: '조례 제2650호', department: '주민복지과', description: '광역 자치법규(사회보장 증진 및 긴급지원 기본조례 제89호)와의 수혜 대상자 선발 소득 기준 역전', warningBadge: '광역 기준 중위소득(50%)과 군 지원기준(65%) 불일치', targetId: 'ORD-2022-JH-2650' },
+      { title: '장흥군 귀농어·귀촌 활성화 및 지원 조례', ordinanceNo: '조례 제2680호', department: '농산유통과', description: '광역 지원 조례(제112호) 제12조 정착 장려금과 기초 조례 제9조 사업비 중복 수급 배제 조항 충돌', warningBadge: '지원 대상 거주 기간 및 정착자금 교부 한도 상충', targetId: 'ORD-2023-JH-2680' },
+    ],
+    categoryOverlaps: [
+      { category: '귀농어·귀촌', metroTitle: '전남광주통합특별시 귀농어·귀촌 활성화 및 지원 조례', metroMeta: '조례 제112호 · 2024. 11. 15 개정', localTitle: '장흥군 귀농어·귀촌 활성화 및 지원에 관한 조례', localMeta: '조례 제2680호 · 2023. 04. 10 일부개정', status: 'overlap_candidate', statusLabel: '겹침 후보', targetId: 'ORD-2023-JH-2680' },
+      { category: '저소득주민 생활안정', metroTitle: '전남광주통합특별시 사회보장 증진 및 긴급지원 기본조례', metroMeta: '조례 제89호 · 2024. 09. 30 제정', localTitle: '장흥군 취약계층 생활안정 지원 기본조례', localMeta: '조례 제2650호 · 2022. 12. 28 개정', status: 'need_check', statusLabel: '확인 필요', targetId: 'ORD-2022-JH-2650' },
+      { category: '여성농어업인', metroTitle: '전남광주통합특별시 여성농어업인 육성 및 지원 조례', metroMeta: '조례 제145호 · 2024. 12. 20 개정', localTitle: '장흥군 여성농어업인 행복바우처 지원 조례', localMeta: '조례 제2510호 · 2021. 06. 15 개정', status: 'overlap_candidate', statusLabel: '겹침 후보', targetId: 'ORD-2021-JH-2510' },
+      { category: '기본소득', metroTitle: '전남광주통합특별시 농어촌 기본소득 기본조례', metroMeta: '조례 제102호 · 2024. 10. 18 제정', localTitle: '장흥군 기본소득 지급 조례', localMeta: '조례 제2418호 · 2020. 08. 14 제정', status: 'need_check', statusLabel: '확인 필요', targetId: 'ORD-2026-JH-0419' },
+      { category: '청년', metroTitle: '전남광주통합특별시 청년 참여 및 기본소득 보장 조례', metroMeta: '조례 제77호 · 2024. 08. 01 제정', localTitle: '장흥군 청년 기본소득 지급 조례', localMeta: '조례 제2789호 · 2024. 01. 12 제정', status: 'overlap_candidate', statusLabel: '겹침 후보', targetId: 'ORD-2023-JH-2789' },
+    ],
+  };
+
+  static TIMELINE_EVENTS = [
+    { date: '2026. 10. 12', title: '자치법규 자동 동기화 및 2차 정합성 스캔', category: '시스템 갱신', description: '국가법령정보센터 Open API를 통하여 장흥군·여수시·목포시 등 5개 파일럿 지자체 조례 총 2,944건 색인 및 변경 조문 자동 대조 완료', badge: '최신 동기화', badgeBg: '#ECFDF5', badgeColor: '#047857', badgeBorder: '#A7F3D0' },
+    { date: '2026. 08. 10', title: '장흥군 기본소득 지급 조례 일부개정', category: '기초 조례 개정', description: '장흥군 조례 제2418호 제8조 제3항 신설 — 국가 또는 통합특별시 기본소득 관련 사업 추진 시 상위 사업 기준 우선 적용 근거 마련 (제4조 본조 우선조항과의 충돌 유발)', badge: '경합 발생', badgeBg: '#FFFBEB', badgeColor: '#B45309', badgeBorder: '#FDE68A' },
+    { date: '2026. 07. 01', title: '전남광주통합특별시 농어촌 기본소득 기본조례 시행', category: '광역 조례 시행', description: '통합특별시 조례 제102호 시행 — 관내 농어촌 1년 이상 계속 거주 주민 대상 분기별 기본소득 지급 체계 공식 가동', badge: '광역 시행', badgeBg: '#EFF6FF', badgeColor: '#1D4ED8', badgeBorder: '#BFDBFE' },
+    { date: '2024. 11. 15', title: '전남광주통합특별시 귀농어·귀촌 활성화 및 지원 조례 제정', category: '광역 조례 제정', description: '통합특별시 조례 제112호 — 도시민의 농어촌 유치 촉진 및 정착장려금(최대 500만원) 지원 기준 확립', badge: '광역 제정', badgeBg: '#EFF6FF', badgeColor: '#1D4ED8', badgeBorder: '#BFDBFE' },
+    { date: '2024. 01. 01', title: '광역-기초 자치법규 통합 데이터베이스 파일럿 구축', category: '행정 통합', description: '광역 행정구역 통합에 따른 기초 자치단체 조례 겹침 및 상충 사전 방지를 위한 법제 대조 지원 체계 가동', badge: '통합 개시', badgeBg: '#F3F4F6', badgeColor: '#374151', badgeBorder: '#E5E7EB' },
+  ];
+
+  state = {
+    activeTab: 'comparison',
+    viewMode: 'portal',
+    selectedRegion: '장흥',
+    searchQuery: '',
+    selectedOrdinanceId: null,
+    filterStatuses: { overlap_candidate: true, need_check: true, no_overlap: true },
+    sortBy: 'relevance',
+    currentPage: 1,
+    statuteModal: { isOpen: false, type: 'local', title: '' },
+    copyToast: false,
+  };
+
+  itemsPerPage = 5;
+
+  badgeColors(status) {
+    if (status === 'overlap_candidate') return { bg: '#EFF6FF', color: '#1D4ED8', border: '#BFDBFE' };
+    if (status === 'need_check') return { bg: '#FFFBEB', color: '#B45309', border: '#FDE68A' };
+    return { bg: '#F3F4F6', color: '#374151', border: '#E5E7EB' };
+  }
+
+  goHome() { this.setState({ activeTab: 'comparison', viewMode: 'portal' }); }
+  logout() { window.alert('공공행정 표준 업무망에 로그인되어 있습니다.'); }
+  noop() {}
+
+  setActiveTab(tab) {
+    this.setState((s) => {
+      let viewMode = s.viewMode;
+      if (tab === 'comparison' && !s.selectedOrdinanceId && viewMode === 'detail') viewMode = 'results';
+      return { activeTab: tab, viewMode };
+    });
+  }
+
+  selectRegion(id) { this.setState((s) => ({ selectedRegion: s.selectedRegion === id ? null : id, currentPage: 1 })); }
+  setSearchQuery(q) { this.setState({ searchQuery: q }); }
+  clearSearchQuery() { this.setState({ searchQuery: '' }); }
+
+  executeSearch(queryOverride) {
+    if (!this.state.selectedRegion) return;
+    this.setState((s) => ({ searchQuery: queryOverride !== undefined ? queryOverride : s.searchQuery, viewMode: 'results', currentPage: 1 }));
+  }
+
+  selectOrdinance(item) {
+    this.setState({ selectedOrdinanceId: item.id, viewMode: 'detail' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  selectOrdinanceById(id) {
+    const item = Component.ORDINANCE_ITEMS.find((o) => o.id === id);
+    if (item) {
+      this.setState({ selectedRegion: item.region, selectedOrdinanceId: id, activeTab: 'comparison', viewMode: 'detail' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  backToResults() { this.setState({ viewMode: 'results' }); }
+  backToPortal() { this.setState({ viewMode: 'portal' }); }
+
+  toggleFilter(status) {
+    this.setState((s) => ({ filterStatuses: { ...s.filterStatuses, [status]: !s.filterStatuses[status] }, currentPage: 1 }));
+  }
+
+  setSortBy(v) { this.setState({ sortBy: v }); }
+  setPage(p) { this.setState({ currentPage: p }); }
+
+  openStatute(type, title) { this.setState({ statuteModal: { isOpen: true, type, title } }); }
+  closeStatute() { this.setState((s) => ({ statuteModal: { ...s.statuteModal, isOpen: false } })); }
+
+  copyJudgment() {
+    const o = Component.ORDINANCE_ITEMS.find((x) => x.id === this.state.selectedOrdinanceId);
+    if (!o) return;
+    const text = `[조례 경합 검토 판정 결과]
+- 안건명: ${o.title} (${o.ordinanceNo})
+- 관할: ${o.region} | 소관: ${o.department}
+- 상태: ${o.statusLabel}
+${o.hasInternalConflict ? `- 내부 충돌 조항:\n  1) ${o.conflictDetails.clauseA.tag}: ${o.conflictDetails.clauseA.text}\n  2) ${o.conflictDetails.clauseB.tag}: ${o.conflictDetails.clauseB.text}` : `- 대조 광역 조례: ${o.matchedMetropolitanOrdinance ? o.matchedMetropolitanOrdinance.name : '해당 없음'}`}
+- 검토 의견: ${o.evaluationBasis ? o.evaluationBasis.description.join(' ') : o.summary}
+- 시스템: 센티멘트 - 광역·기초 조례 겹침 확인 (법제처 Open API 연계)`;
+    const done = () => { this.setState({ copyToast: true }); setTimeout(() => this.setState({ copyToast: false }), 3000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else { done(); }
+  }
+
+  printPage() { window.print(); }
+
+  exportExcel() {
+    const stats = Component.OVERVIEW_STATS;
+    const rows = [
+      ['번호', '분야', '본청 조례 (광역)', '기초 조례 (장흥군)', '판정 상태'],
+      ...stats.categoryOverlaps.map((item, idx) => [String(idx + 1), item.category, `${item.metroTitle} (${item.metroMeta})`, `${item.localTitle} (${item.localMeta})`, item.statusLabel]),
+    ];
+    const csv = '\uFEFF' + rows.map((e) => e.map((f) => `"${String(f).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `자치법규_겹침현황_${this.state.selectedRegion}_20261012.csv`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isPortal = s.viewMode === 'portal' && s.activeTab === 'comparison';
+    const isResults = s.viewMode === 'results' && s.activeTab === 'comparison';
+    const selOrdRaw = s.selectedOrdinanceId ? Component.ORDINANCE_ITEMS.find((o) => o.id === s.selectedOrdinanceId) : null;
+    const isDetail = s.viewMode === 'detail' && s.activeTab === 'comparison' && !!selOrdRaw;
+    const isManagement = s.activeTab === 'management';
+    const isHistory = s.activeTab === 'history';
+
+    const activeTabStyle = 'height:48px;display:flex;align-items:center;padding:0 2px;font-size:14px;background:none;border:none;border-bottom:2px solid #1E3A5F;color:#1E3A5F;font-weight:700;cursor:pointer;';
+    const inactiveTabStyle = 'height:48px;display:flex;align-items:center;padding:0 2px;font-size:14px;background:none;border:none;border-bottom:2px solid transparent;color:#6B7280;font-weight:500;cursor:pointer;';
+
+    const portalRegions = Component.PORTAL_REGIONS.map((r) => {
+      const isSelected = s.selectedRegion === r.id;
+      return {
+        id: r.id, label: r.label, isSelected,
+        style: isSelected
+          ? 'padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;background:#1E3A5F;color:#fff;border:none;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);'
+          : 'padding:7px 14px;border-radius:6px;font-size:12px;font-weight:500;background:#fff;color:#374151;border:1px solid #D1D5DB;display:flex;align-items:center;gap:6px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03);',
+        onClick: () => this.selectRegion(r.id),
+      };
+    });
+
+    const currentRegionInfo = Component.REGIONS.find((r) => r.id === s.selectedRegion) || Component.REGIONS[3];
+
+    const sidebarRegions = Component.REGIONS.map((r) => {
+      const isSelected = s.selectedRegion === r.id;
+      return {
+        id: r.id, fullName: r.fullName, isSelected, notSelected: !isSelected,
+        typeIcon: r.type === '광역' ? 'apartment' : 'domain',
+        rowStyle: isSelected
+          ? 'width:100%;text-align:left;padding:8px 12px;border-radius:4px;font-size:12px;background:#1E3A5F;color:#fff;font-weight:600;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);'
+          : 'width:100%;text-align:left;padding:8px 12px;border-radius:4px;font-size:12px;background:none;color:#374151;font-weight:400;border:none;display:flex;align-items:center;justify-content:space-between;cursor:pointer;',
+        badgeText: isSelected ? '선택됨' : r.type,
+        badgeStyle: isSelected ? 'font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.2);color:#fff;' : 'font-size:10px;padding:2px 6px;border-radius:4px;color:#9CA3AF;',
+        onClick: () => this.selectRegion(r.id),
+      };
+    });
+
+    const regionItems = Component.ORDINANCE_ITEMS.filter((it) => it.region === s.selectedRegion);
+    const q = s.searchQuery.trim().toLowerCase();
+    const filteredItems = regionItems.filter((it) => {
+      if (!s.filterStatuses[it.status]) return false;
+      if (!q) return true;
+      const m = it.matchedMetropolitanOrdinance;
+      return (
+        it.title.toLowerCase().includes(q) ||
+        it.summary.toLowerCase().includes(q) ||
+        it.category.toLowerCase().includes(q) ||
+        it.department.toLowerCase().includes(q) ||
+        it.ordinanceNo.toLowerCase().includes(q) ||
+        (m && m.name.toLowerCase().includes(q)) ||
+        (m && m.note.toLowerCase().includes(q))
+      );
+    });
+    const sortedItems = [...filteredItems].sort((a, b) => {
+      if (s.sortBy === 'latest') return (b.enforcementDate || '').localeCompare(a.enforcementDate || '');
+      if (s.sortBy === 'name') return a.title.localeCompare(b.title, 'ko');
+      return (b.relevanceScore || 0) - (a.relevanceScore || 0);
+    });
+    const totalPages = Math.max(1, Math.ceil(sortedItems.length / this.itemsPerPage));
+    const currentPage = Math.min(s.currentPage, totalPages);
+    const pageSlice = sortedItems.slice((currentPage - 1) * this.itemsPerPage, currentPage * this.itemsPerPage);
+
+    const displayedItems = pageSlice.map((it) => {
+      const badge = this.badgeColors(it.status);
+      const isNeedCheck = it.status === 'need_check';
+      const isNoOverlap = it.status === 'no_overlap';
+      const m = it.matchedMetropolitanOrdinance;
+      return {
+        id: it.id, ordinanceNo: it.ordinanceNo, title: it.title, summary: it.summary, statusLabel: it.statusLabel,
+        department: it.department, team: it.team, enforcementDate: it.enforcementDate,
+        badgeBg: badge.bg, badgeColor: badge.color, badgeBorder: badge.border,
+        hasMatch: !!m,
+        matchName: m ? m.name : '', matchNote: m ? m.note : '',
+        matchBg: isNeedCheck ? 'rgba(255,251,235,.4)' : '#F9FAFB', matchBorder: isNeedCheck ? '#FDE68A' : '#E5E7EB',
+        matchIconColor: isNeedCheck ? '#B45309' : '#1D4ED8', matchIconName: isNeedCheck ? 'priority_high' : 'sync_alt',
+        isNoOverlap, noOverlapReason: it.noOverlapReason || '본청과 겹치는 조례 없음 (고유 자치사무 영역으로 확인)',
+        onSelect: () => this.selectOrdinance(it),
+      };
+    });
+
+    const candidateCount = regionItems.filter((i) => i.status === 'overlap_candidate').length;
+    const needCheckCount = regionItems.filter((i) => i.status === 'need_check').length;
+    const noOverlapCount = regionItems.filter((i) => i.status === 'no_overlap').length;
+    const selectedFilterCount = Object.values(s.filterStatuses).filter(Boolean).length;
+
+    const displayFrom = sortedItems.length ? (currentPage - 1) * this.itemsPerPage + 1 : 0;
+    const displayTo = Math.min(currentPage * this.itemsPerPage, sortedItems.length);
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => ({
+      num, onClick: () => this.setPage(num),
+      style: num === currentPage
+        ? 'padding:4px 10px;border-radius:4px;border:1px solid #1E3A5F;background:#1E3A5F;color:#fff;font-size:12px;font-weight:600;cursor:pointer;'
+        : 'padding:4px 10px;border-radius:4px;border:1px solid #E5E7EB;background:#fff;color:#374151;font-size:12px;font-weight:500;cursor:pointer;',
+    }));
+
+    const recommendedTags = Component.RECOMMENDED_TAGS.map((tag) => ({ label: tag, onClick: () => { this.setSearchQuery(tag); this.setPage(1); } }));
+    const suggestionWords = Component.SUGGESTION_WORDS.map((w) => ({ label: w, onClick: () => this.setSearchQuery(w) }));
+
+    let selOrd = null;
+    if (selOrdRaw) {
+      const badge = this.badgeColors(selOrdRaw.status);
+      const isNeedCheck = selOrdRaw.status === 'need_check';
+      const isNoOverlap = selOrdRaw.status === 'no_overlap';
+      selOrd = {
+        ...selOrdRaw,
+        badgeBg: badge.bg, badgeColor: badge.color, badgeBorder: badge.border,
+        isNeedCheck, isNoOverlap,
+        dotColor: isNeedCheck ? '#D97706' : isNoOverlap ? '#059669' : '#2563EB',
+        subheadNote: selOrdRaw.hasInternalConflict ? '내부 조문 경합 검토 대상 안건' : isNoOverlap ? '고유 자치사무 확인 안건' : '광역-기초 정합성 검토 대상',
+        showComparisonTable: !isNoOverlap && !!selOrdRaw.matchedMetropolitanOrdinance,
+        showSoloDefinitionTable: (isNoOverlap || !selOrdRaw.matchedMetropolitanOrdinance) && !!selOrdRaw.definitionTable,
+        showMetroStatuteButton: !isNoOverlap && !!selOrdRaw.matchedMetropolitanOrdinance,
+        localStatuteLabel: isNoOverlap ? '법제처 원문 열기' : `${selOrdRaw.region} 원문 열기`,
+      };
+    }
+
+    const overviewStats = Component.OVERVIEW_STATS;
+    const attentionItems = overviewStats.attentionItems.map((a) => ({ ...a, onClick: () => this.selectOrdinanceById(a.targetId) }));
+    const categoryOverlaps = overviewStats.categoryOverlaps.map((row) => {
+      const badge = this.badgeColors(row.status);
+      return { ...row, badgeBg: badge.bg, badgeColor: badge.color, badgeBorder: badge.border, onClick: () => this.selectOrdinanceById(row.targetId) };
+    });
+
+    return {
+      isPortal, isResults, isDetail, isManagement, isHistory,
+      selectedRegion: s.selectedRegion, searchQuery: s.searchQuery,
+      goHome: () => this.goHome(), logout: () => this.logout(), noop: () => this.noop(),
+      selectTabComparison: () => this.setActiveTab('comparison'),
+      selectTabManagement: () => this.setActiveTab('management'),
+      selectTabHistory: () => this.setActiveTab('history'),
+      tabComparisonStyle: s.activeTab === 'comparison' ? activeTabStyle : inactiveTabStyle,
+      tabManagementStyle: s.activeTab === 'management' ? activeTabStyle : inactiveTabStyle,
+      tabHistoryStyle: s.activeTab === 'history' ? activeTabStyle : inactiveTabStyle,
+
+      portalRegions,
+      onSearchInputChange: (e) => this.setSearchQuery(e.target.value),
+      onSearchKeyDown: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.executeSearch(); } },
+      clearSearchQuery: () => this.clearSearchQuery(),
+      executeSearchFromPortal: () => this.executeSearch(),
+      viewAllFromPortal: () => this.executeSearch(''),
+
+      regionUnitLabel: s.selectedRegion === '본청' ? '광역단위' : '기초단위',
+      sidebarRegions,
+      selectedFilterCount, candidateCount, needCheckCount, noOverlapCount,
+      filterCandidate: s.filterStatuses.overlap_candidate, filterNeedCheck: s.filterStatuses.need_check, filterNoOverlap: s.filterStatuses.no_overlap,
+      toggleFilterCandidate: () => this.toggleFilter('overlap_candidate'),
+      toggleFilterNeedCheck: () => this.toggleFilter('need_check'),
+      toggleFilterNoOverlap: () => this.toggleFilter('no_overlap'),
+      regionItemsCount: regionItems.length,
+      currentRegionName: currentRegionInfo.name,
+      removeRegionTag: () => this.backToPortal(),
+      onResultsSearchInputChange: (e) => { this.setSearchQuery(e.target.value); this.setPage(1); },
+      clearResultsSearchQuery: () => { this.clearSearchQuery(); this.setPage(1); },
+      rerunSearch: () => this.setPage(1),
+      resultCountColor: sortedItems.length > 0 ? 'color:#022448;' : 'color:#DC2626;',
+      sortedItemsCount: sortedItems.length,
+      isSortRelevance: s.sortBy === 'relevance',
+      sortLatest: () => this.setSortBy('latest'), sortRelevance: () => this.setSortBy('relevance'), sortName: () => this.setSortBy('name'),
+      sortLatestStyle: s.sortBy === 'latest' ? 'background:none;border:none;cursor:pointer;font-weight:700;color:#1E3A5F;font-size:12px;' : 'background:none;border:none;cursor:pointer;color:#6B7280;font-size:12px;',
+      sortRelevanceStyle: s.sortBy === 'relevance' ? 'background:none;border:none;cursor:pointer;font-weight:700;color:#1E3A5F;font-size:12px;display:inline-flex;align-items:center;gap:4px;' : 'background:none;border:none;cursor:pointer;color:#6B7280;font-size:12px;display:inline-flex;align-items:center;gap:4px;',
+      sortNameStyle: s.sortBy === 'name' ? 'background:none;border:none;cursor:pointer;font-weight:700;color:#1E3A5F;font-size:12px;' : 'background:none;border:none;cursor:pointer;color:#6B7280;font-size:12px;',
+      hasDisplayedItems: displayedItems.length > 0, noDisplayedItems: displayedItems.length === 0,
+      displayedItems,
+      suggestionWords, recommendedTags,
+      clearAllFilters: () => { this.setSearchQuery(''); this.setState({ filterStatuses: { overlap_candidate: true, need_check: true, no_overlap: true } }); this.setPage(1); },
+      displayFrom, displayTo,
+      isFirstPage: currentPage === 1, isLastPage: currentPage === totalPages,
+      prevPage: () => this.setPage(Math.max(1, currentPage - 1)), nextPage: () => this.setPage(Math.min(totalPages, currentPage + 1)),
+      prevPageStyle: currentPage === 1 ? 'padding:4px 8px;border-radius:4px;border:1px solid #E5E7EB;background:#fff;color:#9CA3AF;font-size:12px;cursor:not-allowed;opacity:.5;' : 'padding:4px 8px;border-radius:4px;border:1px solid #E5E7EB;background:#fff;color:#4B5563;font-size:12px;cursor:pointer;',
+      nextPageStyle: currentPage === totalPages ? 'padding:4px 8px;border-radius:4px;border:1px solid #E5E7EB;background:#fff;color:#9CA3AF;font-size:12px;cursor:not-allowed;opacity:.5;' : 'padding:4px 8px;border-radius:4px;border:1px solid #E5E7EB;background:#fff;color:#4B5563;font-size:12px;cursor:pointer;',
+      pageNumbers,
+
+      selOrd,
+      backToResults: () => this.backToResults(),
+      openStatuteMetro: () => selOrd && this.openStatute('metro', selOrd.matchedMetropolitanOrdinance.name),
+      openStatuteLocal: () => selOrd && this.openStatute('local', selOrd.title),
+      copyToast: s.copyToast,
+      printPage: () => this.printPage(),
+      copyJudgment: () => this.copyJudgment(),
+
+      overviewStats, attentionItems, categoryOverlaps,
+      exportExcel: () => this.exportExcel(),
+
+      timelineEvents: Component.TIMELINE_EVENTS,
+
+      statuteOpen: s.statuteModal.isOpen,
+      statuteTitle: s.statuteModal.title,
+      statuteTypeLabel: s.statuteModal.type === 'metro' ? '본청 광역 자치법규' : '기초 자치단체 조례 원문',
+      statuteDocNo: 'STATUTE-' + (1000 + (s.selectedOrdinanceId ? s.selectedOrdinanceId.length * 37 % 9000 : 0)),
+      closeStatute: () => this.closeStatute(),
+    };
+  }
+}
+</script>
+</body>
+</html>
