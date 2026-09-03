@@ -1,0 +1,28 @@
+# BE 배포(레포 루트에서 실행)에 필요 없는 것들.
+# search_ordinance.py가 실제로 읽는 건 data/extracted, data/embeddings, data/matches*.json 뿐이라
+# 원본 raw json(수십MB)과 fe/, .venv는 전부 뺀다.
+
+fe/
+.venv/
+__pycache__/
+*.pyc
+
+# 법제처 원본 raw 덤프 (추출 완료본만 배포에 필요, 원본은 로컬/파이프라인용)
+5780000_bukgu.json
+5780000_mokpo.json
+5785000_yeosu.json
+5860000_jangheung.json
+5870000_haenam.json
+6130000_boncheong.json
+
+조례 검색 프로토타입 (standalone).html
+조례 검색 프로토타입.dc.html
+
+data/.cache/
+
+*.log
+.DS_Store
+
+# 시크릿은 번들에 넣지 않는다 — Vercel 프로젝트 환경변수로만 관리한다.
+.env
+.env.*

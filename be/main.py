@@ -22,7 +22,12 @@ app = FastAPI(title="센티멘트 BE")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://fe-gilt-phi.vercel.app",
+    ],
+    # Vercel의 fe 프로젝트가 커밋마다 새 preview URL을 만들기 때문에 그것도 허용한다.
+    allow_origin_regex=r"https://fe-.*-jsoyeonjs-projects\.vercel\.app",
     allow_methods=["GET"],
     allow_headers=["*"],
 )
