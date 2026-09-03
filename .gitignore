@@ -13,3 +13,9 @@ dist
 
 *.log
 *.tsbuildinfo
+
+docs/
+CLAUDE.md
+
+data/.cache/
+__pycache__/
