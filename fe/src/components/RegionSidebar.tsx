@@ -4,8 +4,8 @@ import { Icon } from './Icon';
 
 interface Props {
   regions: Region[];
-  selectedRegion: string;
-  onSelectRegion: (id: string) => void;
+  selectedRegions: string[];
+  onToggleRegion: (id: string) => void;
   statuses: JudgmentStatus[];
   statusCounts: Record<JudgmentStatus, number>;
   onToggleStatus: (status: JudgmentStatus) => void;
@@ -14,14 +14,22 @@ interface Props {
 
 export function RegionSidebar({
   regions,
-  selectedRegion,
-  onSelectRegion,
+  selectedRegions,
+  onToggleRegion,
   statuses,
   statusCounts,
   onToggleStatus,
   regionTotal,
 }: Props) {
-  const unitLabel = selectedRegion === '본청' ? '광역단위' : '기초단위';
+  const selectedTypes = new Set(
+    regions.filter((r) => selectedRegions.includes(r.id)).map((r) => r.type),
+  );
+  const unitLabel =
+    selectedTypes.size > 1
+      ? '광역+기초'
+      : selectedTypes.has('광역')
+        ? '광역단위'
+        : '기초단위';
 
   return (
     <aside className="sidebar">
@@ -36,16 +44,28 @@ export function RegionSidebar({
           </div>
           <div className="sidebar__list">
             {regions.map((region) => {
-              const isSelected = region.id === selectedRegion;
+              const isSelected = selectedRegions.includes(region.id);
+              const isLastOne = isSelected && selectedRegions.length === 1;
               return (
                 <button
                   key={region.id}
                   type="button"
-                  className={isSelected ? 'region-row is-selected' : 'region-row'}
-                  onClick={() => onSelectRegion(region.id)}
+                  aria-pressed={isSelected}
+                  aria-disabled={isLastOne}
+                  title={isLastOne ? '최소 1개 지역은 선택되어 있어야 합니다' : undefined}
+                  className={
+                    isSelected
+                      ? isLastOne
+                        ? 'region-row is-selected is-last'
+                        : 'region-row is-selected'
+                      : 'region-row'
+                  }
+                  onClick={() => onToggleRegion(region.id)}
                 >
                   <span className="region-row__label">
-                    <Icon name={isSelected ? 'check' : region.type === '광역' ? 'apartment' : 'domain'} />
+                    <Icon
+                      name={isSelected ? 'check' : region.type === '광역' ? 'apartment' : 'domain'}
+                    />
                     <span className="region-row__name">{region.fullName}</span>
                   </span>
                   <span className="region-row__badge">{isSelected ? '선택됨' : region.type}</span>

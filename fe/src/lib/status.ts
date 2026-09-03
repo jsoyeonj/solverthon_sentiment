@@ -4,7 +4,7 @@ export type BadgeTone = 'blue' | 'amber' | 'gray';
 
 /** 판정 상태 → 화면 라벨 */
 export const STATUS_LABEL: Record<JudgmentStatus, string> = {
-  overlap_candidate: '겹침 후보',
+  overlap_candidate: '겹침',
   need_check: '확인 필요',
   no_overlap: '겹침 없음',
 };

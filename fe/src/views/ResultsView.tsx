@@ -14,8 +14,8 @@ const SORTS: { key: SortKey; label: string }[] = [
 
 interface Props {
   regions: Region[];
-  selectedRegion: string;
-  onSelectRegion: (id: string) => void;
+  selectedRegions: string[];
+  onToggleRegion: (id: string) => void;
   query: string;
   onQueryChange: (q: string) => void;
   onRerun: () => void;
@@ -34,11 +34,19 @@ interface Props {
   onResetFilters: () => void;
 }
 
+/** 선택된 지역 이름 표시. 여러 개면 "장흥군 외 2곳" 형태로 줄인다. */
+function regionLabel(regions: Region[], selectedRegions: string[]): string {
+  const names = selectedRegions.map((id) => regions.find((r) => r.id === id)?.name ?? id);
+  if (names.length === 0) return '';
+  if (names.length === 1) return names[0];
+  return `${names[0]} 외 ${names.length - 1}곳`;
+}
+
 export function ResultsView(props: Props) {
   const {
     regions,
-    selectedRegion,
-    onSelectRegion,
+    selectedRegions,
+    onToggleRegion,
     query,
     onQueryChange,
     onRerun,
@@ -57,8 +65,7 @@ export function ResultsView(props: Props) {
     onResetFilters,
   } = props;
 
-  const regionInfo = regions.find((r) => r.id === selectedRegion);
-  const regionName = regionInfo?.name ?? selectedRegion;
+  const regionName = regionLabel(regions, selectedRegions);
 
   const items = result?.items ?? [];
   const total = result?.total ?? 0;
@@ -95,8 +102,8 @@ export function ResultsView(props: Props) {
       <div className="results">
         <RegionSidebar
           regions={regions}
-          selectedRegion={selectedRegion}
-          onSelectRegion={onSelectRegion}
+          selectedRegions={selectedRegions}
+          onToggleRegion={onToggleRegion}
           statuses={statuses}
           statusCounts={statusCounts}
           onToggleStatus={onToggleStatus}
@@ -113,7 +120,7 @@ export function ResultsView(props: Props) {
                   <button
                     type="button"
                     className="region-tag__close"
-                    title="지역 태그 제거"
+                    title="지역 선택 초기화"
                     onClick={onBackToPortal}
                   >
                     <Icon name="close" />

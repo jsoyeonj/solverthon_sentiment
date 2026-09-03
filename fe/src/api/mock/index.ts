@@ -48,7 +48,7 @@ function matchesQuery(item: OrdinanceRecordDto, q: string): boolean {
 }
 
 export function searchOrdinances(params: SearchParams): Promise<SearchResponseDto> {
-  const regionItems = ORDINANCES.filter((it) => it.지역 === params.region);
+  const regionItems = ORDINANCES.filter((it) => params.regions.includes(it.지역));
 
   const statusCounts: Record<JudgmentDto, number> = {
     겹침후보: regionItems.filter((it) => it.판정 === '겹침후보').length,

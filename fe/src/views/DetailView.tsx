@@ -6,9 +6,10 @@ import { Icon } from '../components/Icon';
 interface Props {
   ordinance: OrdinanceDetail;
   onBack: () => void;
-  onPrint: () => void;
-  onCopy: () => void;
-  copied: boolean;
+  /** "검색 결과 목록으로 돌아가기" | "이전 화면으로 돌아가기" — 이력이 남아있는지에 따라 달라진다 */
+  backLabel: string;
+  /** 대조표의 본청 조례명을 누르면 그 조례의 상세 화면으로 이동한다 */
+  onOpenOrdinance: (id: string) => void;
 }
 
 /** 구조화 추출 3항목(목적/대상/효과) 표. 대상의 상세조건은 조문 순서대로 나열한다. */
@@ -45,7 +46,7 @@ function CoreTable({ caption, core }: { caption: string; core: OrdinanceCore }) 
   );
 }
 
-export function DetailView({ ordinance, onBack, onPrint, onCopy, copied }: Props) {
+export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Props) {
   const isNeedCheck = ordinance.status === 'need_check';
   const isNoOverlap = ordinance.status === 'no_overlap';
   const metro = ordinance.matchedMetropolitanOrdinance;
@@ -178,7 +179,13 @@ export function DetailView({ ordinance, onBack, onPrint, onCopy, copied }: Props
                     <span className="badge badge--square badge--gray">본청</span>
                     <span className="compare__colhead-meta">광역 자치입법</span>
                   </div>
-                  <h3>{metro.name}</h3>
+                  <button
+                    type="button"
+                    className="compare__colhead-title-btn"
+                    onClick={() => onOpenOrdinance(metro.id)}
+                  >
+                    {metro.name}
+                  </button>
                   <span className="compare__colhead-meta">
                     시행 {metro.enforcementDate} · 자치법규 {metro.id}
                   </span>
@@ -289,7 +296,7 @@ export function DetailView({ ordinance, onBack, onPrint, onCopy, copied }: Props
           <div className="actions__group">
             <button type="button" className="btn" onClick={onBack}>
               <Icon name="arrow_back" />
-              <span>검색 결과 목록으로 돌아가기</span>
+              <span>{backLabel}</span>
             </button>
             <a
               className="btn"
@@ -306,17 +313,6 @@ export function DetailView({ ordinance, onBack, onPrint, onCopy, copied }: Props
                 <span>본청 원문 열기</span>
               </a>
             )}
-          </div>
-          <div className="actions__group actions__group--right">
-            {copied && <span className="toast">✓ 판정 내용이 클립보드에 복사되었습니다</span>}
-            <button type="button" className="btn" onClick={onPrint}>
-              <Icon name="print" />
-              <span>출력</span>
-            </button>
-            <button type="button" className="btn btn--primary" onClick={onCopy}>
-              <Icon name="content_copy" />
-              <span>판정 내용 복사</span>
-            </button>
           </div>
         </section>
 

@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { JudgmentStatus, SortKey } from './types';
 import { fetchOrdinance, fetchRegions, fetchSearch } from './api/ordinances';
 import { ALL_STATUSES } from './lib/status';
-import { buildJudgmentText, copyText } from './lib/judgment';
 import { useAsync } from './hooks/useAsync';
 import { useDebounced } from './hooks/useDebounced';
 import { Header } from './components/Header';
@@ -16,17 +15,23 @@ import { DetailView } from './views/DetailView';
 type ViewMode = 'portal' | 'results' | 'detail';
 
 const PAGE_SIZE = 5;
-const DEFAULT_REGION = '장흥';
+const DEFAULT_REGIONS = ['장흥'];
 
 export function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('portal');
-  const [selectedRegion, setSelectedRegion] = useState<string>(DEFAULT_REGION);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>(DEFAULT_REGIONS);
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<JudgmentStatus[]>(ALL_STATUSES);
   const [sortBy, setSortBy] = useState<SortKey>('relevance');
   const [page, setPage] = useState(1);
-  const [selectedOrdinanceId, setSelectedOrdinanceId] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
+  /**
+   * 상세 화면 이동 이력. 검색 결과에서 카드를 누르면 [id] 하나로 리셋되고,
+   * 상세 화면 안에서 본청 조례 등 다른 조례로 넘어가면 뒤에 쌓인다 —
+   * "뒤로가기"가 검색 결과가 아니라 방금 보던 조례로 돌아가야 하기 때문.
+   */
+  const [ordinanceStack, setOrdinanceStack] = useState<string[]>([]);
+  const selectedOrdinanceId = ordinanceStack.at(-1) ?? null;
+  const isNestedDetail = ordinanceStack.length > 1;
 
   const debouncedQuery = useDebounced(query);
 
@@ -37,13 +42,14 @@ export function App() {
 
   const canSearch = viewMode === 'results';
   const statusKey = statuses.join(',');
+  const regionsKey = selectedRegions.join(',');
 
   const searchState = useAsync(
     (signal) =>
       canSearch
         ? fetchSearch(
             {
-              region: selectedRegion,
+              regions: selectedRegions,
               query: debouncedQuery,
               statuses,
               sortBy,
@@ -53,7 +59,7 @@ export function App() {
             signal,
           )
         : Promise.resolve(null),
-    [canSearch, selectedRegion, debouncedQuery, statusKey, sortBy, page],
+    [canSearch, regionsKey, debouncedQuery, statusKey, sortBy, page],
   );
 
   const needsDetail = viewMode === 'detail' && selectedOrdinanceId !== null;
@@ -69,8 +75,14 @@ export function App() {
 
   const goHome = useCallback(() => setViewMode('portal'), []);
 
-  const handleSelectRegion = useCallback((id: string) => {
-    setSelectedRegion(id);
+  /** 최소 1개는 남긴다 — 다 해제되면 검색할 지역이 없어진다. */
+  const handleToggleRegion = useCallback((id: string) => {
+    setSelectedRegions((prev) => {
+      if (prev.includes(id)) {
+        return prev.length > 1 ? prev.filter((r) => r !== id) : prev;
+      }
+      return [...prev, id];
+    });
     setPage(1);
   }, []);
 
@@ -103,30 +115,27 @@ export function App() {
     setPage(1);
   }, []);
 
+  /** 검색 결과 카드를 눌러 들어갈 때 — 새로 시작하는 것이므로 이력을 리셋한다. */
   const openOrdinance = useCallback((id: string) => {
-    setSelectedOrdinanceId(id);
+    setOrdinanceStack([id]);
     setViewMode('detail');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // 상세가 다른 지역 조례면 선택 지역도 맞춘다 —
-  // 안 맞추면 "검색 결과 목록으로 돌아가기"가 엉뚱한 지역 목록을 보여준다.
-  const detailRegion = detailState.data?.region;
-  useEffect(() => {
-    if (detailRegion && detailRegion !== selectedRegion) {
-      setSelectedRegion(detailRegion);
-      setPage(1);
+  /** 상세 화면 안에서 다른 조례(본청 대조표 등)로 넘어갈 때 — 이력에 쌓는다. */
+  const openRelatedOrdinance = useCallback((id: string) => {
+    setOrdinanceStack((prev) => [...prev, id]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  /** 이력이 남아있으면 그 조례로, 없으면 검색 결과로 돌아간다. */
+  const goBackFromDetail = useCallback(() => {
+    if (isNestedDetail) {
+      setOrdinanceStack((prev) => prev.slice(0, -1));
+    } else {
+      setViewMode('results');
     }
-  }, [detailRegion, selectedRegion]);
-
-  const handleCopyJudgment = useCallback(async () => {
-    if (!detailState.data) return;
-    await copyText(buildJudgmentText(detailState.data));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
-  }, [detailState.data]);
-
-  const handlePrint = useCallback(() => window.print(), []);
+  }, [isNestedDetail]);
 
   const totalIndexed = useMemo(
     () => regions.reduce((sum, region) => sum + region.totalCount, 0),
@@ -143,8 +152,8 @@ export function App() {
       return (
         <PortalView
           regions={regions}
-          selectedRegion={selectedRegion}
-          onSelectRegion={handleSelectRegion}
+          selectedRegions={selectedRegions}
+          onToggleRegion={handleToggleRegion}
           query={query}
           onQueryChange={setQuery}
           onSearch={() => runSearch()}
@@ -161,10 +170,9 @@ export function App() {
       return (
         <DetailView
           ordinance={detailState.data}
-          onBack={() => setViewMode('results')}
-          onPrint={handlePrint}
-          onCopy={handleCopyJudgment}
-          copied={copied}
+          onBack={goBackFromDetail}
+          backLabel={isNestedDetail ? '이전 화면으로 돌아가기' : '검색 결과 목록으로 돌아가기'}
+          onOpenOrdinance={openRelatedOrdinance}
         />
       );
     }
@@ -172,8 +180,8 @@ export function App() {
     return (
       <ResultsView
         regions={regions}
-        selectedRegion={selectedRegion}
-        onSelectRegion={handleSelectRegion}
+        selectedRegions={selectedRegions}
+        onToggleRegion={handleToggleRegion}
         query={query}
         onQueryChange={handleQueryChange}
         onRerun={() => setPage(1)}
