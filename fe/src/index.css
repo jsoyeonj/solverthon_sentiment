@@ -572,10 +572,6 @@ figure {
   box-shadow: var(--shadow-sm);
 }
 
-/* 마지막 1개 남은 선택 지역 — 눌러도 해제되지 않는다는 걸 커서로 알려준다 */
-.chip.is-last {
-  cursor: not-allowed;
-}
 
 .searchbar {
   width: 100%;
@@ -863,14 +859,6 @@ figure {
   background: var(--navy-hover);
 }
 
-/* 마지막 1개 남은 선택 지역 — 눌러도 해제되지 않는다는 걸 커서로 알려준다 */
-.region-row.is-last {
-  cursor: not-allowed;
-}
-
-.region-row.is-last:hover {
-  background: var(--navy);
-}
 
 .region-row__label {
   display: flex;
@@ -1586,14 +1574,6 @@ figure {
   color: var(--muted);
 }
 
-.detail__facts {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 12px;
-  font-size: 12px;
-  color: var(--muted);
-}
 
 /* 내부 조문 충돌 */
 
@@ -1808,12 +1788,6 @@ figure {
   gap: 4px;
 }
 
-.compare__colhead-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .compare__colhead h3 {
   font-size: 15px;
   font-weight: 700;
@@ -1851,15 +1825,6 @@ figure {
   border-radius: 4px;
   overflow: hidden;
   background: var(--surface);
-}
-
-.deftable__cap {
-  background: var(--surface-muted);
-  padding: 6px 12px;
-  border-bottom: 1px solid var(--border);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-4);
 }
 
 .deftable table {
@@ -1960,6 +1925,33 @@ figure {
   padding: 12px;
   color: var(--text-2);
   line-height: 1.6;
+}
+
+/* 소관부서·전화번호·원문 링크 — 대조표 양쪽 칸과 단독 개요에서 공용으로 쓴다 */
+
+.contact-block {
+  padding: 16px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.contact-block__row {
+  line-height: 1.5;
+}
+
+.contact-block__link {
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+/* 대조표 칸 안에서는 부모(.compare__col)가 이미 여백을 주고 있어 겹치지 않게 뺀다 */
+.compare__col .contact-block {
+  padding: 0;
+  border-top: none;
 }
 
 /* 판정 근거 / 우선순위 / 조문 요약 */

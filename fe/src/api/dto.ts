@@ -66,6 +66,8 @@ export interface MetroOrdinanceDto {
   대상?: { 요약: string; 상세조건?: string[] };
   효과?: string;
   원문링크: string;
+  담당부서?: string;
+  전화번호?: string;
   /** 왜 겹침 후보로 묶였는지 한 줄 */
   겹침요지: string;
 }

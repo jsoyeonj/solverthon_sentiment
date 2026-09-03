@@ -19,8 +19,6 @@ export function OrdinanceCard({ item, onSelect }: Props) {
       <div className="ord-card__head">
         <div className="ord-card__titles">
           <div className="ord-card__meta">
-            <span>{item.region}</span>
-            <span className="sep">·</span>
             <span>자치법규 {item.id}</span>
             <span className="sep">·</span>
             <span>시행 {item.enforcementDate}</span>

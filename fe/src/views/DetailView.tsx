@@ -13,10 +13,9 @@ interface Props {
 }
 
 /** 구조화 추출 3항목(목적/대상/효과) 표. 대상의 상세조건은 조문 순서대로 나열한다. */
-function CoreTable({ caption, core }: { caption: string; core: OrdinanceCore }) {
+function CoreTable({ core }: { core: OrdinanceCore }) {
   return (
     <div className="deftable">
-      <div className="deftable__cap">{caption}</div>
       <table>
         <tbody>
           <tr>
@@ -42,6 +41,30 @@ function CoreTable({ caption, core }: { caption: string; core: OrdinanceCore }) 
           </tr>
         </tbody>
       </table>
+    </div>
+  );
+}
+
+/** 표 아래에 붙는 소관부서·전화번호·원문 링크. 대조표 양쪽과 단독 개요에서 공용으로 쓴다. */
+function ContactBlock({
+  department,
+  phone,
+  sourceUrl,
+  linkLabel,
+}: {
+  department?: string;
+  phone?: string;
+  sourceUrl: string;
+  linkLabel: string;
+}) {
+  return (
+    <div className="contact-block">
+      {department && <div className="contact-block__row">소관부서: {department}</div>}
+      {phone && <div className="contact-block__row">{phone}</div>}
+      <a className="btn contact-block__link" href={sourceUrl} target="_blank" rel="noreferrer noopener">
+        <Icon name="open_in_new" />
+        <span>{linkLabel}</span>
+      </a>
     </div>
   );
 }
@@ -98,28 +121,11 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                 {isNeedCheck && <Icon name="warning" />}
                 <span>{ordinance.statusLabel}</span>
               </span>
-              {ordinance.category && (
-                <span className="badge badge--square badge--gray">{ordinance.category}</span>
-              )}
             </div>
             <div className="detail__subhead">
               <span className="dot" style={{ background: dotColor }} />
               <span className="wrap-ok">{subheadNote}</span>
             </div>
-          </div>
-
-          <div className="detail__facts">
-            <span>시행 {ordinance.enforcementDate}</span>
-            <span className="sep">·</span>
-            <span>공포 {ordinance.proclamationDate}</span>
-            <span className="sep">·</span>
-            <span>소관부서: {ordinance.department}</span>
-            {ordinance.phone && (
-              <>
-                <span className="sep">·</span>
-                <span>{ordinance.phone}</span>
-              </>
-            )}
           </div>
 
           {ordinance.hasInternalConflict && ordinance.conflictDetails && (
@@ -175,10 +181,7 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
             <div className="compare__grid">
               <div className="compare__col compare__col--metro">
                 <div className="compare__colhead">
-                  <div className="compare__colhead-row">
-                    <span className="badge badge--square badge--gray">본청</span>
-                    <span className="compare__colhead-meta">광역 자치입법</span>
-                  </div>
+                  <span className="badge badge--square badge--gray">본청</span>
                   <button
                     type="button"
                     className="compare__colhead-title-btn"
@@ -190,20 +193,29 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                     시행 {metro.enforcementDate} · 자치법규 {metro.id}
                   </span>
                 </div>
-                {metro.core && <CoreTable caption="구조화 추출 결과" core={metro.core} />}
+                {metro.core && <CoreTable core={metro.core} />}
+                <ContactBlock
+                  department={metro.department}
+                  phone={metro.phone}
+                  sourceUrl={metro.sourceUrl}
+                  linkLabel="본청 원문 열기"
+                />
               </div>
               <div className="compare__col compare__col--local">
                 <div className="compare__colhead">
-                  <div className="compare__colhead-row">
-                    <span className="badge badge--square badge--blue">{ordinance.region}</span>
-                    <span className="compare__colhead-meta">기초 자치입법</span>
-                  </div>
+                  <span className="badge badge--square badge--blue">{ordinance.region}</span>
                   <h3>{ordinance.title}</h3>
                   <span className="compare__colhead-meta">
                     시행 {ordinance.enforcementDate} · 자치법규 {ordinance.id}
                   </span>
                 </div>
-                <CoreTable caption="구조화 추출 결과" core={ordinance.core} />
+                <CoreTable core={ordinance.core} />
+                <ContactBlock
+                  department={ordinance.department}
+                  phone={ordinance.phone}
+                  sourceUrl={ordinance.sourceUrl}
+                  linkLabel={`${ordinance.region} 원문 열기`}
+                />
               </div>
             </div>
           </section>
@@ -241,6 +253,12 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                 <div className="solo__val">{ordinance.core.effect}</div>
               </div>
             </div>
+            <ContactBlock
+              department={ordinance.department}
+              phone={ordinance.phone}
+              sourceUrl={ordinance.sourceUrl}
+              linkLabel={`${ordinance.region} 원문 열기`}
+            />
           </section>
         )}
 
@@ -298,21 +316,6 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
               <Icon name="arrow_back" />
               <span>{backLabel}</span>
             </button>
-            <a
-              className="btn"
-              href={ordinance.sourceUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-            >
-              <Icon name="open_in_new" />
-              <span>{ordinance.region} 원문 열기</span>
-            </a>
-            {metro && (
-              <a className="btn" href={metro.sourceUrl} target="_blank" rel="noreferrer noopener">
-                <Icon name="open_in_new" />
-                <span>본청 원문 열기</span>
-              </a>
-            )}
           </div>
         </section>
 

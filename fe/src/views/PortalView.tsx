@@ -4,8 +4,8 @@ import { Icon } from '../components/Icon';
 
 interface Props {
   regions: Region[];
-  selectedRegions: string[];
-  onToggleRegion: (id: string) => void;
+  selectedRegion: string | null;
+  onSelectRegion: (id: string) => void;
   query: string;
   onQueryChange: (q: string) => void;
   onSearch: () => void;
@@ -15,8 +15,8 @@ interface Props {
 
 export function PortalView({
   regions,
-  selectedRegions,
-  onToggleRegion,
+  selectedRegion,
+  onSelectRegion,
   query,
   onQueryChange,
   onSearch,
@@ -27,32 +27,25 @@ export function PortalView({
   const localTotal = regions
     .filter((r) => r.type === '기초')
     .reduce((sum, r) => sum + r.totalCount, 0);
-  const canProceed = selectedRegions.length > 0;
 
   return (
     <div className="portal">
       <div className="portal__inner">
         <h1 className="portal__title">어느 지역의 민원을 처리하시나요?</h1>
         <p className="portal__lead">
-          관할 지자체를 선택하시면 광역 및 기초 자치법규 겹침 현황을 대조합니다. 여러 지역을 함께
-          선택할 수 있습니다.
+          관할 지자체를 선택하시면 광역 및 기초 자치법규 겹침 현황을 대조합니다.
         </p>
 
         <div className="portal__regions">
           {regions.map((region) => {
-            const isSelected = selectedRegions.includes(region.id);
-            const isLastOne = isSelected && selectedRegions.length === 1;
+            const isSelected = region.id === selectedRegion;
             return (
               <button
                 key={region.id}
                 type="button"
-                className={
-                  isSelected ? (isLastOne ? 'chip is-selected is-last' : 'chip is-selected') : 'chip'
-                }
+                className={isSelected ? 'chip is-selected' : 'chip'}
                 aria-pressed={isSelected}
-                aria-disabled={isLastOne}
-                title={isLastOne ? '최소 1개 지역은 선택되어 있어야 합니다' : undefined}
-                onClick={() => onToggleRegion(region.id)}
+                onClick={() => onSelectRegion(region.id)}
               >
                 {isSelected && <Icon name="check" />}
                 <span>{region.label}</span>
@@ -93,7 +86,7 @@ export function PortalView({
             type="button"
             className="btn btn--primary"
             onClick={onSearch}
-            disabled={!canProceed}
+            disabled={!selectedRegion}
           >
             <span>검색</span>
             <Icon name="arrow_forward" />
@@ -104,7 +97,7 @@ export function PortalView({
           type="button"
           className="portal__viewall"
           onClick={onBrowseAll}
-          disabled={!canProceed}
+          disabled={!selectedRegion}
         >
           검색어 없이 이 지역 전체 보기
         </button>

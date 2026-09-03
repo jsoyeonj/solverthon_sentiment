@@ -58,6 +58,8 @@ function toMetro(dto: MetroOrdinanceDto) {
     enforcementDate: formatDate(dto.시행일),
     core,
     sourceUrl: dto.원문링크,
+    department: dto.담당부서,
+    phone: dto.전화번호,
     overlapNote: dto.겹침요지,
   };
 }

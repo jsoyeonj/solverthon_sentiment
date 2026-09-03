@@ -15,11 +15,11 @@ import { DetailView } from './views/DetailView';
 type ViewMode = 'portal' | 'results' | 'detail';
 
 const PAGE_SIZE = 5;
-const DEFAULT_REGIONS = ['장흥'];
+const DEFAULT_REGION = '장흥';
 
 export function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('portal');
-  const [selectedRegions, setSelectedRegions] = useState<string[]>(DEFAULT_REGIONS);
+  const [selectedRegion, setSelectedRegion] = useState<string>(DEFAULT_REGION);
   const [query, setQuery] = useState('');
   const [statuses, setStatuses] = useState<JudgmentStatus[]>(ALL_STATUSES);
   const [sortBy, setSortBy] = useState<SortKey>('relevance');
@@ -42,14 +42,13 @@ export function App() {
 
   const canSearch = viewMode === 'results';
   const statusKey = statuses.join(',');
-  const regionsKey = selectedRegions.join(',');
 
   const searchState = useAsync(
     (signal) =>
       canSearch
         ? fetchSearch(
             {
-              regions: selectedRegions,
+              region: selectedRegion,
               query: debouncedQuery,
               statuses,
               sortBy,
@@ -59,7 +58,7 @@ export function App() {
             signal,
           )
         : Promise.resolve(null),
-    [canSearch, regionsKey, debouncedQuery, statusKey, sortBy, page],
+    [canSearch, selectedRegion, debouncedQuery, statusKey, sortBy, page],
   );
 
   const needsDetail = viewMode === 'detail' && selectedOrdinanceId !== null;
@@ -75,14 +74,8 @@ export function App() {
 
   const goHome = useCallback(() => setViewMode('portal'), []);
 
-  /** 최소 1개는 남긴다 — 다 해제되면 검색할 지역이 없어진다. */
-  const handleToggleRegion = useCallback((id: string) => {
-    setSelectedRegions((prev) => {
-      if (prev.includes(id)) {
-        return prev.length > 1 ? prev.filter((r) => r !== id) : prev;
-      }
-      return [...prev, id];
-    });
+  const handleSelectRegion = useCallback((id: string) => {
+    setSelectedRegion(id);
     setPage(1);
   }, []);
 
@@ -152,8 +145,8 @@ export function App() {
       return (
         <PortalView
           regions={regions}
-          selectedRegions={selectedRegions}
-          onToggleRegion={handleToggleRegion}
+          selectedRegion={selectedRegion}
+          onSelectRegion={handleSelectRegion}
           query={query}
           onQueryChange={setQuery}
           onSearch={() => runSearch()}
@@ -180,8 +173,8 @@ export function App() {
     return (
       <ResultsView
         regions={regions}
-        selectedRegions={selectedRegions}
-        onToggleRegion={handleToggleRegion}
+        selectedRegion={selectedRegion}
+        onSelectRegion={handleSelectRegion}
         query={query}
         onQueryChange={handleQueryChange}
         onRerun={() => setPage(1)}

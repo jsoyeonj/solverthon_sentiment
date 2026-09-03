@@ -69,6 +69,8 @@ export interface MatchedMetropolitanOrdinance {
   enforcementDate: string;
   core?: OrdinanceCore;
   sourceUrl: string;
+  department?: string;
+  phone?: string;
   /** 왜 겹침 후보로 묶였는지에 대한 한 줄 근거 */
   overlapNote: string;
 }
@@ -112,9 +114,8 @@ export interface OrdinanceDetail extends OrdinanceSummary {
 
 /** 검색 파라미터 — BE 검색 API 쿼리스트링과 1:1 대응 */
 export interface SearchParams {
-  /** 하나 이상. 여러 개를 함께 선택하면 그 지역들을 합쳐서 검색한다. */
-  regions: string[];
-  /** 자연어 검색어. 비어 있으면 브라우징 모드(선택 지역 전체). */
+  region: string;
+  /** 자연어 검색어. 비어 있으면 브라우징 모드(해당 지역 전체). */
   query: string;
   statuses: JudgmentStatus[];
   sortBy: SortKey;

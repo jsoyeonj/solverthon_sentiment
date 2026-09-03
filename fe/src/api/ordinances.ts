@@ -29,7 +29,7 @@ export async function fetchSearch(
     : await apiGet<SearchResponseDto>(
         '/api/ordinances',
         {
-          region: params.regions,
+          region: params.region,
           q: params.query,
           status: params.statuses,
           sort: params.sortBy,
