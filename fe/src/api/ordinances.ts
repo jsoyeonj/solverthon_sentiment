@@ -7,11 +7,18 @@
  * 엔드포인트 규격은 docs/api-contract.md 참고.
  */
 
-import type { OrdinanceDetail, Region, SearchParams, SearchResult } from '../types';
-import type { OrdinanceRecordDto, RegionDto, SearchResponseDto } from './dto';
+import type { JudgmentStatus, OrdinanceDetail, Region, SearchParams, SearchResult } from '../types';
+import type { JudgmentDto, OrdinanceRecordDto, RegionDto, SearchResponseDto } from './dto';
 import { USE_MOCK, apiGet } from './client';
 import { toOrdinance, toRegion, toSearchResult } from './mapper';
 import * as mock from './mock';
+
+/** BE는 판정을 전부 한글로 받는다(dto.ts 기준) — 화면 내부 영어 상태값을 쿼리 전에 되돌린다. */
+const STATUS_TO_JUDGMENT: Record<JudgmentStatus, JudgmentDto> = {
+  overlap_candidate: '겹침후보',
+  need_check: '확인필요',
+  no_overlap: '겹침없음',
+};
 
 export async function fetchRegions(signal?: AbortSignal): Promise<Region[]> {
   const dto = USE_MOCK
@@ -31,7 +38,7 @@ export async function fetchSearch(
         {
           region: params.region,
           q: params.query,
-          status: params.statuses,
+          status: params.statuses.map((s) => STATUS_TO_JUDGMENT[s]),
           sort: params.sortBy,
           page: params.page,
           pageSize: params.pageSize,

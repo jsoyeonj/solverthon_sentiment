@@ -3,7 +3,6 @@ import type { JudgmentStatus, SortKey } from './types';
 import { fetchOrdinance, fetchRegions, fetchSearch } from './api/ordinances';
 import { ALL_STATUSES } from './lib/status';
 import { useAsync } from './hooks/useAsync';
-import { useDebounced } from './hooks/useDebounced';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { ErrorBanner, LoadingBanner } from './components/StateBanner';
@@ -21,6 +20,8 @@ export function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('portal');
   const [selectedRegion, setSelectedRegion] = useState<string>(DEFAULT_REGION);
   const [query, setQuery] = useState('');
+  /** 실제로 검색에 쓰이는 검색어 — 타이핑만으로는 안 바뀌고, 검색 제출(엔터/버튼/추천어 클릭)로만 바뀐다. */
+  const [submittedQuery, setSubmittedQuery] = useState('');
   const [statuses, setStatuses] = useState<JudgmentStatus[]>(ALL_STATUSES);
   const [sortBy, setSortBy] = useState<SortKey>('relevance');
   const [page, setPage] = useState(1);
@@ -32,8 +33,6 @@ export function App() {
   const [ordinanceStack, setOrdinanceStack] = useState<string[]>([]);
   const selectedOrdinanceId = ordinanceStack.at(-1) ?? null;
   const isNestedDetail = ordinanceStack.length > 1;
-
-  const debouncedQuery = useDebounced(query);
 
   // ---- 데이터 로딩 -------------------------------------------------------
 
@@ -49,7 +48,7 @@ export function App() {
         ? fetchSearch(
             {
               region: selectedRegion,
-              query: debouncedQuery,
+              query: submittedQuery,
               statuses,
               sortBy,
               page,
@@ -58,7 +57,7 @@ export function App() {
             signal,
           )
         : Promise.resolve(null),
-    [canSearch, selectedRegion, debouncedQuery, statusKey, sortBy, page],
+    [canSearch, selectedRegion, submittedQuery, statusKey, sortBy, page],
   );
 
   const needsDetail = viewMode === 'detail' && selectedOrdinanceId !== null;
@@ -79,16 +78,17 @@ export function App() {
     setPage(1);
   }, []);
 
-  const runSearch = useCallback((nextQuery?: string) => {
-    if (nextQuery !== undefined) setQuery(nextQuery);
-    setViewMode('results');
-    setPage(1);
-  }, []);
-
-  const handleQueryChange = useCallback((next: string) => {
-    setQuery(next);
-    setPage(1);
-  }, []);
+  /** 검색 제출 — 엔터/검색 버튼/추천 검색어 클릭 등 "지금 이 검색어로 찾아줘"에서만 부른다. */
+  const runSearch = useCallback(
+    (nextQuery?: string) => {
+      const q = nextQuery ?? query;
+      if (nextQuery !== undefined) setQuery(nextQuery);
+      setSubmittedQuery(q);
+      setViewMode('results');
+      setPage(1);
+    },
+    [query],
+  );
 
   const handleToggleStatus = useCallback((status: JudgmentStatus) => {
     setStatuses((prev) =>
@@ -104,6 +104,7 @@ export function App() {
 
   const handleResetFilters = useCallback(() => {
     setQuery('');
+    setSubmittedQuery('');
     setStatuses(ALL_STATUSES);
     setPage(1);
   }, []);
@@ -176,8 +177,8 @@ export function App() {
         selectedRegion={selectedRegion}
         onSelectRegion={handleSelectRegion}
         query={query}
-        onQueryChange={handleQueryChange}
-        onRerun={() => setPage(1)}
+        onQueryChange={setQuery}
+        onQuerySubmit={runSearch}
         statuses={statuses}
         onToggleStatus={handleToggleStatus}
         sortBy={sortBy}

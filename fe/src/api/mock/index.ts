@@ -50,15 +50,18 @@ function matchesQuery(item: OrdinanceRecordDto, q: string): boolean {
 export function searchOrdinances(params: SearchParams): Promise<SearchResponseDto> {
   const regionItems = ORDINANCES.filter((it) => it.지역 === params.region);
 
+  // 검색어(브라우징 모드면 지역 전체) 결과 기준 — status 체크박스 필터는 반영하지 않는다.
+  const q = params.query.trim().toLowerCase();
+  const queryMatched = regionItems.filter((it) => matchesQuery(it, q));
+
   const statusCounts: Record<JudgmentDto, number> = {
-    겹침후보: regionItems.filter((it) => it.판정 === '겹침후보').length,
-    확인필요: regionItems.filter((it) => it.판정 === '확인필요').length,
-    겹침없음: regionItems.filter((it) => it.판정 === '겹침없음').length,
+    겹침후보: queryMatched.filter((it) => it.판정 === '겹침후보').length,
+    확인필요: queryMatched.filter((it) => it.판정 === '확인필요').length,
+    겹침없음: queryMatched.filter((it) => it.판정 === '겹침없음').length,
   };
 
   const wanted = params.statuses.map((s) => STATUS_TO_JUDGMENT[s]);
-  const q = params.query.trim().toLowerCase();
-  const filtered = regionItems.filter((it) => wanted.includes(it.판정) && matchesQuery(it, q));
+  const filtered = queryMatched.filter((it) => wanted.includes(it.판정));
 
   const sorted = [...filtered].sort((a, b) => {
     if (params.sortBy === 'latest') return (b.시행일 || '').localeCompare(a.시행일 || '');

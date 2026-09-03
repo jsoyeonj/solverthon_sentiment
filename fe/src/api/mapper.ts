@@ -108,7 +108,11 @@ export function toOrdinance(dto: OrdinanceRecordDto): OrdinanceDetail {
           note: conflict.비고,
         }
       : undefined,
-    priorityClauses: (dto.우선순위조항 ?? []).map((c) => ({ clause: c.조문, text: c.내용 })),
+    priorityClauses: (dto.우선순위조항 ?? []).map((c) => ({
+      clause: c.조문번호,
+      text: c.원문,
+      source: c.출처,
+    })),
     judgmentBasis: dto.판정근거 ?? [],
     extractionNote: dto.추출특이사항,
   };

@@ -2012,6 +2012,9 @@ figure {
 }
 
 .article__title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   font-size: 12px;
   font-weight: 700;
   color: var(--navy);

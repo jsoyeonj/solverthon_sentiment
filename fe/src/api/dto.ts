@@ -35,8 +35,11 @@ export interface OrdinanceDto {
 }
 
 export interface PriorityClauseDto {
-  조문: string;
-  내용: string;
+  조문번호: string;
+  원문: string;
+  유형?: string;
+  /** 겹침 판정이 있는 조례에서만 옴 — 본청·지역 조항을 합칠 때 어느 쪽 조례의 조문인지 표시 */
+  출처?: '본청' | '지역';
 }
 
 /**

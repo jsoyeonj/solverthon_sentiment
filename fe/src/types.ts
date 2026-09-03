@@ -44,6 +44,8 @@ export interface PriorityClause {
   clause: string;
   /** 조문 원문 */
   text: string;
+  /** 겹침 판정이 있을 때만 옴 — 본청·지역 중 어느 조례의 조문인지 */
+  source?: '본청' | '지역';
 }
 
 /** 한 조례 안에서 우선순위 조문끼리 충돌하는 경우 (장흥군 제4조 vs 제8조③ 케이스) */

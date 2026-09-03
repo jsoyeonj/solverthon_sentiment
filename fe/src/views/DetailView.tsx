@@ -291,9 +291,20 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
               <h2>우선순위 조항</h2>
             </div>
             <div className="clause-list">
-              {ordinance.priorityClauses.map((clause) => (
-                <article className="article" key={clause.clause}>
-                  <div className="article__title">{clause.clause}</div>
+              {ordinance.priorityClauses.map((clause, index) => (
+                <article className="article" key={`${clause.clause}-${index}`}>
+                  <div className="article__title">
+                    {clause.source && (
+                      <span
+                        className={`badge badge--square ${
+                          clause.source === '본청' ? 'badge--gray' : 'badge--blue'
+                        }`}
+                      >
+                        {clause.source === '본청' ? '본청' : ordinance.region}
+                      </span>
+                    )}
+                    <span>{clause.clause}</span>
+                  </div>
                   <p>{clause.text}</p>
                 </article>
               ))}

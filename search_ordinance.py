@@ -20,6 +20,7 @@ build_embeddings.py로 미리 만들어둔 <slug>.npy 문서 인덱스에 대해
 """
 
 import argparse
+import glob
 import os
 
 import numpy as np
@@ -27,12 +28,33 @@ import numpy as np
 import extract_ordinance as m
 import build_embeddings as be
 
-MATCHES_PATH = os.path.join(m.DATA_DIR, "matches.json")
+MATCHES_GLOB = os.path.join(m.DATA_DIR, "matches*.json")
 
+# 실측 데이터 기준: judge_matches.py 프롬프트는 "겹침 후보"를 요청하지만 Claude가 저장한
+# data/matches*.json에는 전부 "겹침"(후보 없이)으로 들어있다. 둘 다 받아둔다.
 VERDICT_NORMALIZE = {
     "겹침 후보": "겹침후보",
+    "겹침": "겹침후보",
     "확인 필요": "확인필요",
 }
+
+# FE region id(한글) <-> 파이프라인 slug. fe/src/api/mock/fixtures.ts의 REGIONS와 동일한 값.
+#
+# 북구/여수/해남은 추출 데이터가 없거나(여수·해남) 극히 일부만 있어서(북구 38/533),
+# 목포는 matches_mokpo.json이 현재 추출 데이터 기준과 어긋나서 데이터가 준비될 때까지
+# 임시로 목록에서 뺀다. data/extracted, data/matches_mokpo.json 등 원본은 그대로 둔다 —
+# 다시 준비되면 여기 항목만 되돌리면 된다.
+REGION_INFO = {
+    "boncheong": {"id": "본청", "name": "본청", "fullName": "본청 (전남광주통합특별시)",
+                  "label": "본청(전남광주통합특별시)", "type": "광역", "totalCount": 366},
+    "jangheung": {"id": "장흥", "name": "장흥군", "fullName": "장흥군",
+                  "label": "장흥", "type": "기초", "totalCount": 455},
+}
+REGION_ID_TO_SLUG = {info["id"]: slug for slug, info in REGION_INFO.items()}
+
+
+def get_regions():
+    return list(REGION_INFO.values())
 
 
 def cosine_sims(query_vec, vectors):
@@ -42,10 +64,18 @@ def cosine_sims(query_vec, vectors):
     return v @ q
 
 
+def _load_all_matches():
+    """data/matches.json, data/matches_<region>.json 등 매칭 결과 파일을 전부 합친다."""
+    matches = []
+    for path in sorted(glob.glob(MATCHES_GLOB)):
+        matches.extend(m.read_json(path, []))
+    return matches
+
+
 def _matches_by_region_id(slug):
-    """data/matches.json에서 slug 지역 겹침 판정을 지역조례ID(=인덱스 키) 기준으로 묶는다."""
+    """slug 지역 겹침 판정을 지역조례ID(=인덱스 키) 기준으로 묶는다."""
     by_id = {}
-    for entry in m.read_json(MATCHES_PATH, []):
+    for entry in _load_all_matches():
         if entry.get("지역명") == slug:
             by_id[entry["지역조례ID"]] = entry
     return by_id
@@ -71,6 +101,12 @@ def _to_metro(boncheong_id, boncheong_extracted, note):
 
 def build_record(law_id, data, relevance, match_entry, boncheong_extracted):
     """extracted 레코드 + (있으면) matches.json 판정을 OrdinanceRecordDto 모양으로 합친다."""
+    # 매칭이 있으면 judge_matches.py가 본청·지역 양쪽 우선순위조항을 "출처"로 표시해
+    # 합쳐둔 목록을 쓴다(대조 맥락에서 더 유용) — 없으면 이 조례 자신의 조항만.
+    priority_clauses = data.get("우선순위조항") or []
+    if match_entry and match_entry.get("우선순위조항"):
+        priority_clauses = match_entry["우선순위조항"]
+
     record = {
         "자치법규일련번호": data.get("자치법규일련번호", law_id),
         "조례명": data.get("조례명"),
@@ -78,7 +114,7 @@ def build_record(law_id, data, relevance, match_entry, boncheong_extracted):
         "목적": data.get("목적"),
         "대상": data.get("대상"),
         "효과": data.get("효과"),
-        "우선순위조항": data.get("우선순위조항") or [],
+        "우선순위조항": priority_clauses,
         "내부충돌여부": data.get("내부충돌여부", False),
         "추출특이사항": data.get("추출특이사항"),
         "원문링크": data.get("원문링크"),
@@ -99,6 +135,111 @@ def build_record(law_id, data, relevance, match_entry, boncheong_extracted):
         record["판정"] = "겹침없음"
         record["판정없음사유"] = "본청 조례와 겹침 판정 이력 없음"
     return record
+
+
+def _text_matches(data, q_lower):
+    """임베딩 인덱스가 없는 지역용 폴백 — fe/src/api/mock/index.ts의 matchesQuery와 동일 기준."""
+    haystack = [
+        data.get("조례명") or "",
+        data.get("목적") or "",
+        data.get("효과") or "",
+        (data.get("대상") or {}).get("요약") or "",
+    ]
+    haystack += (data.get("대상") or {}).get("상세조건") or []
+    return any(q_lower in h.lower() for h in haystack)
+
+
+def get_ordinance_by_id(law_serial_no):
+    """자치법규일련번호(MST, extracted 안쪽 필드)로 6개 지역을 전부 뒤져 상세 레코드 1건을 찾는다."""
+    for slug in m.RAW_FILES:
+        extracted = m.load_extracted(slug)
+        for law_id, data in extracted.items():
+            if data.get("자치법규일련번호", law_id) != law_serial_no:
+                continue
+            matches_by_id = _matches_by_region_id(slug)
+            match_entry = matches_by_id.get(law_id)
+            boncheong_extracted = m.load_extracted("boncheong") if match_entry else {}
+            relevance = match_entry.get("유사도") if match_entry else None
+            return build_record(law_id, data, relevance, match_entry, boncheong_extracted)
+    return None
+
+
+def search_api(region_id, query="", statuses=None, sort="relevance", page=1, page_size=10, threshold=0.3):
+    """GET /api/ordinances 구현. 반환값은 SearchResponseDto와 같은 모양.
+
+    query가 비어 있으면 브라우징 모드(해당 지역 전체, 임베딩 호출 없음).
+    임베딩 인덱스가 없는 지역은 부분 문자열 검색으로 대체한다(항상 응답이 나가야 함).
+    statusCounts/regionTotal은 status 필터와 무관하게 지역 전체 기준으로 센다.
+    """
+    empty = {"items": [], "total": 0, "regionTotal": 0,
+              "statusCounts": {"겹침후보": 0, "확인필요": 0, "겹침없음": 0}}
+    slug = REGION_ID_TO_SLUG.get(region_id)
+    if slug is None:
+        return empty
+
+    extracted = m.load_extracted(slug)
+    matches_by_id = _matches_by_region_id(slug)
+    boncheong_extracted = m.load_extracted("boncheong") if matches_by_id else {}
+
+    def record_for(law_id, data, relevance=None):
+        return build_record(law_id, data, relevance, matches_by_id.get(law_id), boncheong_extracted)
+
+    region_items = [record_for(law_id, data) for law_id, data in extracted.items()]
+
+    query = (query or "").strip()
+    if not query:
+        query_items = region_items
+    else:
+        query_items = []
+        try:
+            ids, vectors = be.load_index(slug)
+        except FileNotFoundError:
+            ids, vectors = None, None
+
+        sims = None
+        if vectors is not None and len(ids):
+            try:
+                sims = cosine_sims(be.embed_query(query), vectors)
+            except Exception as exc:
+                # Voyage 레이트리밋(무료 3RPM) 등으로 임베딩 호출이 끝내 실패해도
+                # 검색 자체는 죽지 않아야 한다 — 문자열 검색으로 대체.
+                print(f"[search_api] 임베딩 검색 실패, 문자열 검색으로 대체: {exc}")
+
+        if sims is not None:
+            for idx, law_id in enumerate(ids):
+                sim = float(sims[idx])
+                if sim < threshold:
+                    continue
+                query_items.append(record_for(law_id, extracted.get(law_id, {}), sim))
+        else:
+            q_lower = query.lower()
+            for law_id, data in extracted.items():
+                if _text_matches(data, q_lower):
+                    query_items.append(record_for(law_id, data))
+
+    # 검색어(브라우징 모드면 지역 전체) 결과 기준 — status 체크박스 필터는 반영하지 않는다.
+    status_counts = {"겹침후보": 0, "확인필요": 0, "겹침없음": 0}
+    for it in query_items:
+        status_counts[it["판정"]] = status_counts.get(it["판정"], 0) + 1
+
+    wanted = set(statuses) if statuses else None
+    filtered = [it for it in query_items if wanted is None or it["판정"] in wanted]
+
+    if sort == "latest":
+        filtered.sort(key=lambda it: it.get("시행일") or "", reverse=True)
+    elif sort == "name":
+        filtered.sort(key=lambda it: it.get("조례명") or "")
+    else:
+        filtered.sort(key=lambda it: it.get("관련도") if it.get("관련도") is not None else -1, reverse=True)
+
+    page = max(page, 1)
+    start = (page - 1) * page_size
+    return {
+        "items": filtered[start:start + page_size],
+        "total": len(filtered),
+        "regionTotal": len(extracted),
+        "statusCounts": status_counts,
+    }
 
 
 def search(slug, query_text, threshold=0.3):

@@ -17,8 +17,10 @@ interface Props {
   selectedRegion: string;
   onSelectRegion: (id: string) => void;
   query: string;
+  /** 입력창 표시값만 갱신 — 타이핑만으로는 검색을 다시 부르지 않는다. */
   onQueryChange: (q: string) => void;
-  onRerun: () => void;
+  /** 지금 이 검색어로 실제 검색을 실행한다 (엔터/검색 버튼/추천어 클릭/지우기). */
+  onQuerySubmit: (nextQuery?: string) => void;
   statuses: JudgmentStatus[];
   onToggleStatus: (status: JudgmentStatus) => void;
   sortBy: SortKey;
@@ -41,7 +43,7 @@ export function ResultsView(props: Props) {
     onSelectRegion,
     query,
     onQueryChange,
-    onRerun,
+    onQuerySubmit,
     statuses,
     onToggleStatus,
     sortBy,
@@ -130,7 +132,7 @@ export function ResultsView(props: Props) {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
-                        onRerun();
+                        onQuerySubmit();
                       }
                     }}
                     placeholder="조례 제명, 조항 내용 또는 키워드를 입력하세요"
@@ -140,7 +142,7 @@ export function ResultsView(props: Props) {
                     <button
                       type="button"
                       className="icon-btn"
-                      onClick={() => onQueryChange('')}
+                      onClick={() => onQuerySubmit('')}
                       aria-label="검색어 지우기"
                     >
                       <Icon name="cancel" />
@@ -148,7 +150,7 @@ export function ResultsView(props: Props) {
                   )}
                 </div>
               </div>
-              <button type="button" className="btn btn--primary" onClick={onRerun}>
+              <button type="button" className="btn btn--primary" onClick={() => onQuerySubmit()}>
                 <Icon name="search" />
                 <span>검색</span>
               </button>
@@ -218,7 +220,7 @@ export function ResultsView(props: Props) {
                     <button
                       type="button"
                       className="empty__word"
-                      onClick={() => onQueryChange(word)}
+                      onClick={() => onQuerySubmit(word)}
                     >
                       '{word}'
                     </button>
@@ -233,7 +235,7 @@ export function ResultsView(props: Props) {
                     key={tag}
                     type="button"
                     className="tag-btn"
-                    onClick={() => onQueryChange(tag)}
+                    onClick={() => onQuerySubmit(tag)}
                   >
                     {tag}
                   </button>
