@@ -1,7 +1,7 @@
 """
 Voyage AI로 조례 임베딩 만들기 (Phase 4)
 
-data/extracted/<slug>.json (목적+대상.요약)을 읽어서 지역별 임베딩 인덱스를
+data/extracted/<slug>.json (목적+대상.요약+조례명)을 읽어서 지역별 임베딩 인덱스를
 data/embeddings/<slug>.npy(벡터) + data/embeddings/<slug>_ids.json(조례ID 순서)로 저장한다.
 raw 원본 파일도, extracted 파일도 여기서는 읽기만 하고 절대 쓰지 않는다.
 
@@ -74,10 +74,11 @@ def embed_texts(texts, input_type="document"):
 
 
 def embedding_text(data):
-    """extracted 레코드 하나에서 임베딩할 텍스트를 조립: 목적 + 대상.요약."""
+    """extracted 레코드 하나에서 임베딩할 텍스트를 조립: 목적 + 대상.요약 + 조례명."""
     parts = [
         data.get("목적") or "",
         (data.get("대상") or {}).get("요약") or "",
+        data.get("조례명") or "",
     ]
     return " ".join(p for p in parts if p).strip()
 
