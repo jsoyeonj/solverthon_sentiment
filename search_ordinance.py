@@ -40,15 +40,17 @@ VERDICT_NORMALIZE = {
 
 # FE region id(한글) <-> 파이프라인 slug. fe/src/api/mock/fixtures.ts의 REGIONS와 동일한 값.
 #
-# 북구/여수/해남은 추출 데이터가 없거나(여수·해남) 극히 일부만 있어서(북구 38/533),
-# 목포는 matches_mokpo.json이 현재 추출 데이터 기준과 어긋나서 데이터가 준비될 때까지
-# 임시로 목록에서 뺀다. data/extracted, data/matches_mokpo.json 등 원본은 그대로 둔다 —
-# 다시 준비되면 여기 항목만 되돌리면 된다.
+# 여수/해남은 추출 데이터가 없고, 목포는 matches_mokpo.json이 현재 추출 데이터 기준과
+# 어긋나서 데이터가 준비될 때까지 임시로 목록에서 뺀다. data/extracted,
+# data/matches_mokpo.json 등 원본은 그대로 둔다 — 다시 준비되면 여기 항목만 되돌리면 된다.
+# 북구는 533/533 전량 추출·임베딩 완료(2026-09-04)되어 장흥과 동일하게 포함한다.
 REGION_INFO = {
     "boncheong": {"id": "본청", "name": "본청", "fullName": "본청 (전남광주통합특별시)",
                   "label": "본청(전남광주통합특별시)", "type": "광역", "totalCount": 366},
     "jangheung": {"id": "장흥", "name": "장흥군", "fullName": "장흥군",
                   "label": "장흥", "type": "기초", "totalCount": 455},
+    "bukgu": {"id": "북구", "name": "북구", "fullName": "광주광역시 북구",
+              "label": "북구", "type": "기초", "totalCount": 533},
 }
 REGION_ID_TO_SLUG = {info["id"]: slug for slug, info in REGION_INFO.items()}
 
