@@ -86,17 +86,6 @@ export function RegionSidebar({
             ))}
           </div>
         </div>
-
-        <div className="notice">
-          <div className="notice__head">
-            <Icon name="info" />
-            <span>법제 검토 지침 안내</span>
-          </div>
-          <p>
-            광역 자치단체의 위임사무 및 자치사무와 기초자치단체 조례 간 조항 충돌 또는 권한 침해
-            여부를 자동 대조합니다.
-          </p>
-        </div>
       </div>
 
       <div className="sidebar__foot">

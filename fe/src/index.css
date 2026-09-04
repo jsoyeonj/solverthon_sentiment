@@ -1250,6 +1250,7 @@ figure {
 .match-box > .icon {
   font-size: 20px;
   flex-shrink: 0;
+  margin-top: 3px;
   color: var(--blue-text);
 }
 

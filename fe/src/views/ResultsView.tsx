@@ -85,12 +85,6 @@ export function ResultsView(props: Props) {
             <span className="sep">/</span>
             <span className="wrap-ok">전라남도·광주광역시 통합 자치법규 통합 데이터베이스</span>
           </div>
-          <div className="subbar__sync">
-            <span className="dot" />
-            <span className="wrap-ok">
-              국가법령정보센터 실시간 동기화 (최근 갱신: 2025. 02. 24 09:30)
-            </span>
-          </div>
         </div>
       </div>
 
