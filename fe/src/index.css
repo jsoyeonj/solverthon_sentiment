@@ -1677,6 +1677,9 @@ figure {
 
 .no-overlap-panel__head .icon {
   font-size: 27px;
+  width: 27px;
+  display: inline-flex;
+  justify-content: center;
   color: var(--navy);
 }
 
@@ -1695,7 +1698,7 @@ figure {
 .no-overlap-panel__foot {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   padding-top: 8px;
   margin-top: 4px;
   border-top: 1px solid var(--blue-border);
@@ -1705,6 +1708,9 @@ figure {
 
 .no-overlap-panel__foot .icon {
   font-size: 20px;
+  width: 27px;
+  display: inline-flex;
+  justify-content: center;
   color: var(--green);
 }
 
