@@ -187,7 +187,6 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                 <Icon name="verified_user" />
                 <h2>본청과 겹치는 조례 없음</h2>
               </div>
-              <p>{ordinance.noOverlapReason}</p>
               <div className="no-overlap-panel__foot">
                 <Icon name="check_circle" />
                 <span>광역·기초 조례 자동 교차 대조 완료</span>

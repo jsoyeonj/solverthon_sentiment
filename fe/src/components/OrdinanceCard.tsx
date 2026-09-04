@@ -2,8 +2,6 @@ import type { OrdinanceSummary } from '../types';
 import { statusBadgeClass } from '../lib/status';
 import { Icon } from './Icon';
 
-const DEFAULT_NO_OVERLAP_REASON = '본청과 겹치는 조례 없음 (고유 자치사무 영역으로 확인)';
-
 interface Props {
   item: OrdinanceSummary;
   onSelect: (id: string) => void;
@@ -12,7 +10,6 @@ interface Props {
 export function OrdinanceCard({ item, onSelect }: Props) {
   const match = item.matchedMetropolitanOrdinance;
   const isNeedCheck = item.status === 'need_check';
-  const isNoOverlap = item.status === 'no_overlap';
 
   return (
     <article className="ord-card">
@@ -36,16 +33,9 @@ export function OrdinanceCard({ item, onSelect }: Props) {
         <div className={isNeedCheck ? 'match-box match-box--attention' : 'match-box'}>
           <Icon name={isNeedCheck ? 'priority_high' : 'sync_alt'} />
           <div style={{ flex: 1 }}>
-            <span className="match-box__name wrap-ok">본청 「{match.name}」</span>
-            <span className="match-box__note wrap-ok">({match.overlapNote})</span>
+            <span className="badge badge--square badge--gray match-box__tag">본청</span>
+            <span className="match-box__name wrap-ok">{match.name}</span>
           </div>
-        </div>
-      )}
-
-      {isNoOverlap && (
-        <div className="no-overlap-line">
-          <Icon name="check_circle" />
-          <span className="wrap-ok">{item.noOverlapReason || DEFAULT_NO_OVERLAP_REASON}</span>
         </div>
       )}
 
