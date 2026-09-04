@@ -166,7 +166,7 @@ def get_ordinance_by_id(law_serial_no):
     return None
 
 
-def search_api(region_id, query="", statuses=None, sort="relevance", page=1, page_size=10, threshold=0.32):
+def search_api(region_id, query="", statuses=None, sort="relevance", page=1, page_size=10, threshold=0.315):
     """GET /api/ordinances 구현. 반환값은 SearchResponseDto와 같은 모양.
 
     query가 비어 있으면 브라우징 모드(해당 지역 전체, 임베딩 호출 없음).
@@ -251,7 +251,7 @@ def search_api(region_id, query="", statuses=None, sort="relevance", page=1, pag
     }
 
 
-def search(slug, query_text, threshold=0.32):
+def search(slug, query_text, threshold=0.315):
     ids, vectors = be.load_index(slug)
     extracted = m.load_extracted(slug)
     matches_by_id = _matches_by_region_id(slug)
@@ -286,7 +286,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("slug", choices=list(m.RAW_FILES), help="검색 대상 지역")
     parser.add_argument("query", help="검색어")
-    parser.add_argument("--threshold", type=float, default=0.32, help="이 값 이상만 출력 (기본 0.32)")
+    parser.add_argument("--threshold", type=float, default=0.315, help="이 값 이상만 출력 (기본 0.315)")
     args = parser.parse_args()
 
     result = search(args.slug, args.query, args.threshold)
