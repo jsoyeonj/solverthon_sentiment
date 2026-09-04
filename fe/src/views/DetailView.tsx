@@ -77,6 +77,7 @@ function ContactBlock({
 export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Props) {
   const isNeedCheck = ordinance.status === 'need_check';
   const isNoOverlap = ordinance.status === 'no_overlap';
+  const isMetro = isMetroRegion(ordinance.region);
   const metro = ordinance.matchedMetropolitanOrdinance;
 
   const showComparison = !isNoOverlap && !!metro;
@@ -127,10 +128,12 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
           <div className="detail__hero-top">
             <div className="detail__hero-titles">
               <h1 className="detail__title">{ordinance.title}</h1>
-              <span className={statusBadgeClass(ordinance.status)}>
-                {isNeedCheck && <Icon name="warning" />}
-                <span>{ordinance.statusLabel}</span>
-              </span>
+              {!isMetro && (
+                <span className={statusBadgeClass(ordinance.status)}>
+                  {isNeedCheck && <Icon name="warning" />}
+                  <span>{ordinance.statusLabel}</span>
+                </span>
+              )}
             </div>
             {/* 내부 조문 충돌처럼 실제로 확인이 필요한 경우에만 보여준다 */}
             {ordinance.hasInternalConflict && (
@@ -168,7 +171,7 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
           )}
 
           {/* "본청과 겹치는 조례 없음" 문구는 지방조례를 본청과 대조한 결과라 본청 자기 조례에는 안 맞는다 */}
-          {isNoOverlap && !isMetroRegion(ordinance.region) && (
+          {isNoOverlap && !isMetro && (
             <div className="no-overlap-panel">
               <div className="no-overlap-panel__head">
                 <Icon name="verified_user" />
