@@ -1,5 +1,6 @@
 import type { OrdinanceSummary } from '../types';
 import { statusBadgeClass } from '../lib/status';
+import { isMetroRegion } from '../lib/region';
 import { Icon } from './Icon';
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
 export function OrdinanceCard({ item, onSelect }: Props) {
   const match = item.matchedMetropolitanOrdinance;
   const isNeedCheck = item.status === 'need_check';
+  // 본청 자체 조례는 본청과 대조한다는 게 성립하지 않아 판정 배지·비교 버튼이 다 무의미하다.
+  const isMetro = isMetroRegion(item.region);
 
   return (
     <article className="ord-card">
@@ -24,7 +27,7 @@ export function OrdinanceCard({ item, onSelect }: Props) {
             {item.title}
           </button>
         </div>
-        <span className={statusBadgeClass(item.status)}>{item.statusLabel}</span>
+        {!isMetro && <span className={statusBadgeClass(item.status)}>{item.statusLabel}</span>}
       </div>
 
       <p className="ord-card__summary">{item.purpose}</p>
@@ -49,10 +52,12 @@ export function OrdinanceCard({ item, onSelect }: Props) {
             </>
           )}
         </div>
-        <button type="button" className="btn btn--link" onClick={() => onSelect(item.id)}>
-          <span>비교 보기</span>
-          <Icon name="arrow_forward" />
-        </button>
+        {!isMetro && (
+          <button type="button" className="btn btn--link" onClick={() => onSelect(item.id)}>
+            <span>비교 보기</span>
+            <Icon name="arrow_forward" />
+          </button>
+        )}
       </div>
     </article>
   );

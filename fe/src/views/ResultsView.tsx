@@ -1,5 +1,6 @@
 import type { JudgmentStatus, Region, SearchResult, SortKey } from '../types';
 import { RECOMMENDED_TAGS, SUGGESTION_WORDS } from '../api/mock/fixtures';
+import { isMetroRegion } from '../lib/region';
 import { Icon } from '../components/Icon';
 import { OrdinanceCard } from '../components/OrdinanceCard';
 import { Pagination } from '../components/Pagination';
@@ -61,6 +62,7 @@ export function ResultsView(props: Props) {
 
   const regionInfo = regions.find((r) => r.id === selectedRegion);
   const regionName = regionInfo?.name ?? selectedRegion;
+  const isMetro = isMetroRegion(selectedRegion);
 
   const items = result?.items ?? [];
   const total = result?.total ?? 0;
@@ -103,19 +105,24 @@ export function ResultsView(props: Props) {
           <div className="results__sticky">
             <div className="querybar">
               <div className="querybar__left">
-                <span className="region-tag">
-                  <Icon name="pin_drop" />
-                  <span className="nowrap">지역: {regionName}</span>
-                  <button
-                    type="button"
-                    className="region-tag__close"
-                    title="지역 태그 제거"
-                    onClick={onBackToPortal}
-                  >
-                    <Icon name="close" />
-                  </button>
-                </span>
-                <span className="sep">|</span>
+                {/* 본청은 지역 선택 개념이 없어 태그를 빼고 검색창만 둔다 */}
+                {!isMetro && (
+                  <>
+                    <span className="region-tag">
+                      <Icon name="pin_drop" />
+                      <span className="nowrap">지역: {regionName}</span>
+                      <button
+                        type="button"
+                        className="region-tag__close"
+                        title="지역 태그 제거"
+                        onClick={onBackToPortal}
+                      >
+                        <Icon name="close" />
+                      </button>
+                    </span>
+                    <span className="sep">|</span>
+                  </>
+                )}
                 <div className="querybar__field">
                   <Icon name="search" />
                   <input

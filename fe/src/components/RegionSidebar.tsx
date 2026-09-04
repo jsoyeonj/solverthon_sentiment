@@ -1,5 +1,6 @@
 import type { JudgmentStatus, Region } from '../types';
 import { ALL_STATUSES, STATUS_LABEL, STATUS_TONE } from '../lib/status';
+import { isMetroRegion } from '../lib/region';
 import { Icon } from './Icon';
 
 interface Props {
@@ -21,7 +22,8 @@ export function RegionSidebar({
   onToggleStatus,
   regionTotal,
 }: Props) {
-  const unitLabel = selectedRegion === '본청' ? '광역단위' : '기초단위';
+  const isMetro = isMetroRegion(selectedRegion);
+  const unitLabel = isMetro ? '광역단위' : '기초단위';
 
   return (
     <aside className="sidebar">
@@ -58,34 +60,38 @@ export function RegionSidebar({
           </div>
         </div>
 
-        <div className="divider" />
-
-        <div>
-          <div className="sidebar__head">
-            <h2>
-              <Icon name="tune" />
-              판정 필터
-            </h2>
-            <span className="sidebar__hint">선택 {statuses.length}건</span>
-          </div>
-          <div className="filter-list">
-            {ALL_STATUSES.map((status) => (
-              <label key={status} className="filter-row">
-                <span className="filter-row__left">
-                  <input
-                    type="checkbox"
-                    checked={statuses.includes(status)}
-                    onChange={() => onToggleStatus(status)}
-                  />
-                  <span className="filter-row__text">{STATUS_LABEL[status]}</span>
-                </span>
-                <span className={`filter-row__count badge--${STATUS_TONE[status]} badge`}>
-                  {statusCounts[status] ?? 0}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
+        {/* 본청 자체 조례는 본청과 대조한다는 개념이 없어 판정 필터가 무의미하다 */}
+        {!isMetro && (
+          <>
+            <div className="divider" />
+            <div>
+              <div className="sidebar__head">
+                <h2>
+                  <Icon name="tune" />
+                  판정 필터
+                </h2>
+                <span className="sidebar__hint">선택 {statuses.length}건</span>
+              </div>
+              <div className="filter-list">
+                {ALL_STATUSES.map((status) => (
+                  <label key={status} className="filter-row">
+                    <span className="filter-row__left">
+                      <input
+                        type="checkbox"
+                        checked={statuses.includes(status)}
+                        onChange={() => onToggleStatus(status)}
+                      />
+                      <span className="filter-row__text">{STATUS_LABEL[status]}</span>
+                    </span>
+                    <span className={`filter-row__count badge--${STATUS_TONE[status]} badge`}>
+                      {statusCounts[status] ?? 0}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="sidebar__foot">
