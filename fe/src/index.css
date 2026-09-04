@@ -2101,6 +2101,41 @@ figure {
   }
 }
 
+@media (max-width: 640px) {
+  /* 범례 헤더 — 제목이 길면 오른쪽 안내문구랑 겹쳤다. 안 맞으면 아래 줄로 내린다. */
+  .legend__head {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+  .legend__note {
+    text-align: left;
+  }
+
+  /* 단독 규정 개요 표 — 176px 고정 라벨 칸이 화면 절반을 먹어서 세로로 쌓는다 */
+  .solo__row {
+    flex-direction: column;
+  }
+  .solo__key {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* 대조표 안 목적/대상/효과 표 — 마찬가지로 라벨·값을 세로로 쌓는다 */
+  .deftable table,
+  .deftable tbody,
+  .deftable tr,
+  .deftable th,
+  .deftable td {
+    display: block;
+    width: 100%;
+  }
+  .deftable th {
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+  }
+}
+
 /* 대상 상세조건 / 우선순위 조항 목록 ---------------------------------------- */
 
 .cond-list {

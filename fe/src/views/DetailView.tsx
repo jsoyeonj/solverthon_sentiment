@@ -102,11 +102,9 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
   const showOverlapNote = !!metro?.overlapNote && !overlapNoteIsDuplicate;
   const hasBasis = ordinance.judgmentBasis.length > 0 || showOverlapNote;
 
-  const subheadNote = ordinance.hasInternalConflict
-    ? '내부 조문 경합 검토 대상 안건'
-    : isNoOverlap
-      ? '고유 자치사무 확인 안건'
-      : '광역-기초 정합성 검토 대상';
+  // "고유 자치사무 확인 안건"(겹침없음)·"광역-기초 정합성 검토 대상"(일반 비교) 문구는
+  // 뺐다 — 내부 조문 충돌처럼 실제로 주의가 필요한 경우에만 서브헤드를 보여준다.
+  const subheadNote = '내부 조문 경합 검토 대상 안건';
 
   const dotColor = isNeedCheck
     ? 'var(--amber-strong)'
@@ -147,8 +145,8 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                 <span>{ordinance.statusLabel}</span>
               </span>
             </div>
-            {/* 겹침 없음(no_overlap)일 땐 "고유 자치사무 확인 안건" 문구를 안 보여준다 */}
-            {!isNoOverlap && (
+            {/* 내부 조문 충돌처럼 실제로 확인이 필요한 경우에만 보여준다 */}
+            {ordinance.hasInternalConflict && (
               <div className="detail__subhead">
                 <span className="dot" style={{ background: dotColor }} />
                 <span className="wrap-ok">{subheadNote}</span>
