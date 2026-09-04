@@ -49,7 +49,7 @@ REGION_INFO = {
                   "label": "본청(전남광주통합특별시)", "type": "광역", "totalCount": 366},
     "jangheung": {"id": "장흥", "name": "장흥군", "fullName": "장흥군",
                   "label": "장흥", "type": "기초", "totalCount": 455},
-    "bukgu": {"id": "북구", "name": "북구", "fullName": "광주광역시 북구",
+    "bukgu": {"id": "북구", "name": "북구", "fullName": "북구",
               "label": "북구", "type": "기초", "totalCount": 533},
 }
 REGION_ID_TO_SLUG = {info["id"]: slug for slug, info in REGION_INFO.items()}

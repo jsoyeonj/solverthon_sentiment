@@ -19,7 +19,7 @@ export const REGIONS: RegionDto[] = [
     type: '광역',
     totalCount: 366,
   },
-  { id: '북구', name: '광주 북구', fullName: '광주 북구', label: '북구', type: '기초', totalCount: 533 },
+  { id: '북구', name: '북구', fullName: '북구', label: '북구', type: '기초', totalCount: 533 },
   { id: '여수', name: '여수시', fullName: '여수시', label: '여수', type: '기초', totalCount: 726 },
   { id: '장흥', name: '장흥군', fullName: '장흥군', label: '장흥', type: '기초', totalCount: 455 },
   { id: '해남', name: '해남군', fullName: '해남군', label: '해남', type: '기초', totalCount: 529 },
