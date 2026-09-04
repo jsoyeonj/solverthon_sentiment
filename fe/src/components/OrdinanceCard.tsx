@@ -32,7 +32,7 @@ export function OrdinanceCard({ item, onSelect }: Props) {
       {match && (
         <div className={isNeedCheck ? 'match-box match-box--attention' : 'match-box'}>
           <Icon name={isNeedCheck ? 'priority_high' : 'sync_alt'} />
-          <div style={{ flex: 1 }}>
+          <div className="match-box__content">
             <span className="badge badge--square badge--gray match-box__tag">본청</span>
             <span className="match-box__name wrap-ok">{match.name}</span>
           </div>

@@ -1250,7 +1250,6 @@ figure {
 .match-box > .icon {
   font-size: 20px;
   flex-shrink: 0;
-  margin-top: 2px;
   color: var(--blue-text);
 }
 
@@ -1258,9 +1257,17 @@ figure {
   color: var(--amber-text);
 }
 
+.match-box__content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 20px;
+}
+
 .match-box__tag {
-  margin-right: 6px;
-  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 .match-box__name {
