@@ -1,0 +1,1437 @@
+[
+  {
+    "source_region": "boncheong",
+    "source_id": "2263842",
+    "target_region": "bukgu",
+    "target_id": "2035075",
+    "similarity": 0.9029
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263519",
+    "target_region": "bukgu",
+    "target_id": "2035163",
+    "similarity": 0.8929
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263279",
+    "target_region": "bukgu",
+    "target_id": "2227757",
+    "similarity": 0.8677
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263493",
+    "target_region": "bukgu",
+    "target_id": "2224467",
+    "similarity": 0.8557
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263319",
+    "target_region": "bukgu",
+    "target_id": "2215732",
+    "similarity": 0.853
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266943",
+    "target_region": "bukgu",
+    "target_id": "2233857",
+    "similarity": 0.8524
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263500",
+    "target_region": "bukgu",
+    "target_id": "2173195",
+    "similarity": 0.8497
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266849",
+    "target_region": "bukgu",
+    "target_id": "2215733",
+    "similarity": 0.8489
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263528",
+    "target_region": "bukgu",
+    "target_id": "2204390",
+    "similarity": 0.847
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263266",
+    "target_region": "bukgu",
+    "target_id": "2258255",
+    "similarity": 0.8406
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263518",
+    "target_region": "bukgu",
+    "target_id": "2035040",
+    "similarity": 0.8394
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263331",
+    "target_region": "bukgu",
+    "target_id": "2034794",
+    "similarity": 0.8384
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263507",
+    "target_region": "bukgu",
+    "target_id": "2035003",
+    "similarity": 0.8363
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263524",
+    "target_region": "bukgu",
+    "target_id": "2173194",
+    "similarity": 0.836
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263821",
+    "target_region": "bukgu",
+    "target_id": "2034880",
+    "similarity": 0.8333
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263486",
+    "target_region": "bukgu",
+    "target_id": "2208396",
+    "similarity": 0.8309
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263514",
+    "target_region": "bukgu",
+    "target_id": "2215733",
+    "similarity": 0.8283
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263347",
+    "target_region": "bukgu",
+    "target_id": "2215736",
+    "similarity": 0.8266
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266944",
+    "target_region": "bukgu",
+    "target_id": "2240763",
+    "similarity": 0.8264
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266849",
+    "target_region": "bukgu",
+    "target_id": "2035019",
+    "similarity": 0.8255
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266960",
+    "target_region": "bukgu",
+    "target_id": "2212310",
+    "similarity": 0.8159
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263490",
+    "target_region": "bukgu",
+    "target_id": "2215730",
+    "similarity": 0.8157
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263514",
+    "target_region": "bukgu",
+    "target_id": "2035019",
+    "similarity": 0.8136
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263523",
+    "target_region": "bukgu",
+    "target_id": "2238733",
+    "similarity": 0.8127
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263812",
+    "target_region": "bukgu",
+    "target_id": "2034837",
+    "similarity": 0.8126
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266948",
+    "target_region": "bukgu",
+    "target_id": "2035109",
+    "similarity": 0.8098
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263496",
+    "target_region": "bukgu",
+    "target_id": "2215732",
+    "similarity": 0.8074
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263408",
+    "target_region": "bukgu",
+    "target_id": "2235971",
+    "similarity": 0.807
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263374",
+    "target_region": "bukgu",
+    "target_id": "2035089",
+    "similarity": 0.8059
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263334",
+    "target_region": "bukgu",
+    "target_id": "2215734",
+    "similarity": 0.8052
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263347",
+    "target_region": "bukgu",
+    "target_id": "2035201",
+    "similarity": 0.8035
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263820",
+    "target_region": "bukgu",
+    "target_id": "2216055",
+    "similarity": 0.8022
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263813",
+    "target_region": "bukgu",
+    "target_id": "2157114",
+    "similarity": 0.8017
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263825",
+    "target_region": "bukgu",
+    "target_id": "2034946",
+    "similarity": 0.8013
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263494",
+    "target_region": "bukgu",
+    "target_id": "2159183",
+    "similarity": 0.8012
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266954",
+    "target_region": "bukgu",
+    "target_id": "2198617",
+    "similarity": 0.8012
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263447",
+    "target_region": "bukgu",
+    "target_id": "2034873",
+    "similarity": 0.7984
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263516",
+    "target_region": "bukgu",
+    "target_id": "2035078",
+    "similarity": 0.7982
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263506",
+    "target_region": "bukgu",
+    "target_id": "2034928",
+    "similarity": 0.7979
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263504",
+    "target_region": "bukgu",
+    "target_id": "2035086",
+    "similarity": 0.7973
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263306",
+    "target_region": "bukgu",
+    "target_id": "2215735",
+    "similarity": 0.7951
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263390",
+    "target_region": "bukgu",
+    "target_id": "2177978",
+    "similarity": 0.7941
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263496",
+    "target_region": "bukgu",
+    "target_id": "2179322",
+    "similarity": 0.7936
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266872",
+    "target_region": "bukgu",
+    "target_id": "2256640",
+    "similarity": 0.7924
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266929",
+    "target_region": "bukgu",
+    "target_id": "2034881",
+    "similarity": 0.7922
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263427",
+    "target_region": "bukgu",
+    "target_id": "2142541",
+    "similarity": 0.792
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263238",
+    "target_region": "bukgu",
+    "target_id": "2035062",
+    "similarity": 0.791
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263828",
+    "target_region": "bukgu",
+    "target_id": "2035012",
+    "similarity": 0.7891
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263483",
+    "target_region": "bukgu",
+    "target_id": "2220257",
+    "similarity": 0.7881
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263524",
+    "target_region": "bukgu",
+    "target_id": "2215734",
+    "similarity": 0.7877
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266844",
+    "target_region": "bukgu",
+    "target_id": "2166072",
+    "similarity": 0.7869
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263822",
+    "target_region": "bukgu",
+    "target_id": "2034920",
+    "similarity": 0.7861
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263492",
+    "target_region": "bukgu",
+    "target_id": "2034799",
+    "similarity": 0.7859
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266871",
+    "target_region": "bukgu",
+    "target_id": "2184432",
+    "similarity": 0.7853
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263488",
+    "target_region": "bukgu",
+    "target_id": "2034780",
+    "similarity": 0.7846
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263260",
+    "target_region": "bukgu",
+    "target_id": "2256645",
+    "similarity": 0.7844
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266926",
+    "target_region": "bukgu",
+    "target_id": "2198616",
+    "similarity": 0.784
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263460",
+    "target_region": "bukgu",
+    "target_id": "2184435",
+    "similarity": 0.7837
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263274",
+    "target_region": "bukgu",
+    "target_id": "2191655",
+    "similarity": 0.7829
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263538",
+    "target_region": "bukgu",
+    "target_id": "2035201",
+    "similarity": 0.7807
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263319",
+    "target_region": "bukgu",
+    "target_id": "2179322",
+    "similarity": 0.7793
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263534",
+    "target_region": "bukgu",
+    "target_id": "2035184",
+    "similarity": 0.7787
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263362",
+    "target_region": "bukgu",
+    "target_id": "2035065",
+    "similarity": 0.7783
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263309",
+    "target_region": "bukgu",
+    "target_id": "2190218",
+    "similarity": 0.777
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266847",
+    "target_region": "bukgu",
+    "target_id": "2222887",
+    "similarity": 0.7767
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266945",
+    "target_region": "bukgu",
+    "target_id": "2246084",
+    "similarity": 0.774
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266857",
+    "target_region": "bukgu",
+    "target_id": "2035231",
+    "similarity": 0.7739
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266932",
+    "target_region": "bukgu",
+    "target_id": "2185364",
+    "similarity": 0.7732
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263232",
+    "target_region": "bukgu",
+    "target_id": "2198696",
+    "similarity": 0.7728
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263528",
+    "target_region": "bukgu",
+    "target_id": "2035040",
+    "similarity": 0.7695
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263815",
+    "target_region": "bukgu",
+    "target_id": "2035172",
+    "similarity": 0.7692
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263498",
+    "target_region": "bukgu",
+    "target_id": "2034830",
+    "similarity": 0.7683
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263536",
+    "target_region": "bukgu",
+    "target_id": "2035009",
+    "similarity": 0.7683
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263538",
+    "target_region": "bukgu",
+    "target_id": "2215736",
+    "similarity": 0.7681
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263246",
+    "target_region": "bukgu",
+    "target_id": "2196866",
+    "similarity": 0.7674
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263522",
+    "target_region": "bukgu",
+    "target_id": "2233858",
+    "similarity": 0.7634
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266955",
+    "target_region": "bukgu",
+    "target_id": "2175494",
+    "similarity": 0.7626
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263306",
+    "target_region": "bukgu",
+    "target_id": "2035200",
+    "similarity": 0.7625
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263830",
+    "target_region": "bukgu",
+    "target_id": "2235965",
+    "similarity": 0.7614
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263279",
+    "target_region": "bukgu",
+    "target_id": "2205547",
+    "similarity": 0.7596
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263513",
+    "target_region": "bukgu",
+    "target_id": "2174277",
+    "similarity": 0.758
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266951",
+    "target_region": "bukgu",
+    "target_id": "2035125",
+    "similarity": 0.7578
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263518",
+    "target_region": "bukgu",
+    "target_id": "2204390",
+    "similarity": 0.7571
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263229",
+    "target_region": "bukgu",
+    "target_id": "2222452",
+    "similarity": 0.7566
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263508",
+    "target_region": "bukgu",
+    "target_id": "2035015",
+    "similarity": 0.755
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266852",
+    "target_region": "bukgu",
+    "target_id": "2229860",
+    "similarity": 0.7537
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263245",
+    "target_region": "bukgu",
+    "target_id": "2035227",
+    "similarity": 0.7509
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263521",
+    "target_region": "bukgu",
+    "target_id": "2035089",
+    "similarity": 0.7507
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266958",
+    "target_region": "bukgu",
+    "target_id": "2034976",
+    "similarity": 0.7472
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263532",
+    "target_region": "bukgu",
+    "target_id": "2035069",
+    "similarity": 0.743
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263539",
+    "target_region": "bukgu",
+    "target_id": "2204391",
+    "similarity": 0.7403
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263255",
+    "target_region": "bukgu",
+    "target_id": "2035078",
+    "similarity": 0.7362
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263482",
+    "target_region": "bukgu",
+    "target_id": "2034825",
+    "similarity": 0.7356
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263358",
+    "target_region": "bukgu",
+    "target_id": "2232354",
+    "similarity": 0.7335
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263409",
+    "target_region": "bukgu",
+    "target_id": "2252198",
+    "similarity": 0.7317
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263334",
+    "target_region": "bukgu",
+    "target_id": "2173194",
+    "similarity": 0.7307
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266867",
+    "target_region": "bukgu",
+    "target_id": "2034806",
+    "similarity": 0.7304
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266843",
+    "target_region": "bukgu",
+    "target_id": "2174276",
+    "similarity": 0.7296
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266934",
+    "target_region": "bukgu",
+    "target_id": "2205549",
+    "similarity": 0.7242
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263495",
+    "target_region": "bukgu",
+    "target_id": "2035200",
+    "similarity": 0.7238
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263512",
+    "target_region": "bukgu",
+    "target_id": "2035004",
+    "similarity": 0.7209
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263247",
+    "target_region": "bukgu",
+    "target_id": "2035294",
+    "similarity": 0.7201
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263273",
+    "target_region": "bukgu",
+    "target_id": "2160720",
+    "similarity": 0.7197
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263520",
+    "target_region": "bukgu",
+    "target_id": "2035202",
+    "similarity": 0.7185
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263240",
+    "target_region": "bukgu",
+    "target_id": "2035158",
+    "similarity": 0.7182
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263266",
+    "target_region": "bukgu",
+    "target_id": "2222552",
+    "similarity": 0.7156
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263521",
+    "target_region": "bukgu",
+    "target_id": "2035277",
+    "similarity": 0.7155
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263814",
+    "target_region": "bukgu",
+    "target_id": "2190552",
+    "similarity": 0.7143
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263306",
+    "target_region": "bukgu",
+    "target_id": "2215732",
+    "similarity": 0.7108
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263824",
+    "target_region": "bukgu",
+    "target_id": "2034800",
+    "similarity": 0.7071
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263505",
+    "target_region": "bukgu",
+    "target_id": "2034996",
+    "similarity": 0.7048
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266868",
+    "target_region": "bukgu",
+    "target_id": "2034917",
+    "similarity": 0.7039
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263832",
+    "target_region": "bukgu",
+    "target_id": "2035290",
+    "similarity": 0.7038
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266546",
+    "target_region": "bukgu",
+    "target_id": "2035090",
+    "similarity": 0.7019
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263524",
+    "target_region": "bukgu",
+    "target_id": "2035086",
+    "similarity": 0.7012
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263824",
+    "target_region": "bukgu",
+    "target_id": "2222887",
+    "similarity": 0.7008
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263283",
+    "target_region": "bukgu",
+    "target_id": "2191655",
+    "similarity": 0.7
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263815",
+    "target_region": "bukgu",
+    "target_id": "2157114",
+    "similarity": 0.6997
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263285",
+    "target_region": "bukgu",
+    "target_id": "2191655",
+    "similarity": 0.6983
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263235",
+    "target_region": "bukgu",
+    "target_id": "2035228",
+    "similarity": 0.6978
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263414",
+    "target_region": "bukgu",
+    "target_id": "2034969",
+    "similarity": 0.6953
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263516",
+    "target_region": "bukgu",
+    "target_id": "2258255",
+    "similarity": 0.6951
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263831",
+    "target_region": "bukgu",
+    "target_id": "2035119",
+    "similarity": 0.694
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263374",
+    "target_region": "bukgu",
+    "target_id": "2035277",
+    "similarity": 0.6939
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263246",
+    "target_region": "bukgu",
+    "target_id": "2035259",
+    "similarity": 0.6907
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263495",
+    "target_region": "bukgu",
+    "target_id": "2215735",
+    "similarity": 0.6897
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263531",
+    "target_region": "bukgu",
+    "target_id": "2035284",
+    "similarity": 0.6894
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263301",
+    "target_region": "bukgu",
+    "target_id": "2190218",
+    "similarity": 0.6892
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266923",
+    "target_region": "bukgu",
+    "target_id": "2034894",
+    "similarity": 0.688
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263357",
+    "target_region": "bukgu",
+    "target_id": "2035192",
+    "similarity": 0.6877
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263239",
+    "target_region": "bukgu",
+    "target_id": "2035294",
+    "similarity": 0.6872
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263334",
+    "target_region": "bukgu",
+    "target_id": "2035086",
+    "similarity": 0.6871
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263511",
+    "target_region": "bukgu",
+    "target_id": "2034999",
+    "similarity": 0.6867
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263818",
+    "target_region": "bukgu",
+    "target_id": "2235967",
+    "similarity": 0.6841
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263510",
+    "target_region": "bukgu",
+    "target_id": "2179950",
+    "similarity": 0.682
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263533",
+    "target_region": "bukgu",
+    "target_id": "2144259",
+    "similarity": 0.6813
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263511",
+    "target_region": "bukgu",
+    "target_id": "2035004",
+    "similarity": 0.6797
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263292",
+    "target_region": "bukgu",
+    "target_id": "2142541",
+    "similarity": 0.6794
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263402",
+    "target_region": "bukgu",
+    "target_id": "2228885",
+    "similarity": 0.6789
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266942",
+    "target_region": "bukgu",
+    "target_id": "2163724",
+    "similarity": 0.6788
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263499",
+    "target_region": "bukgu",
+    "target_id": "2034867",
+    "similarity": 0.678
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263241",
+    "target_region": "bukgu",
+    "target_id": "2202357",
+    "similarity": 0.6775
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266937",
+    "target_region": "bukgu",
+    "target_id": "2035037",
+    "similarity": 0.6769
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266951",
+    "target_region": "bukgu",
+    "target_id": "2235966",
+    "similarity": 0.6769
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263258",
+    "target_region": "bukgu",
+    "target_id": "2035158",
+    "similarity": 0.6758
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263394",
+    "target_region": "bukgu",
+    "target_id": "2179322",
+    "similarity": 0.6737
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263275",
+    "target_region": "bukgu",
+    "target_id": "2191655",
+    "similarity": 0.6734
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263358",
+    "target_region": "bukgu",
+    "target_id": "2035069",
+    "similarity": 0.6728
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263532",
+    "target_region": "bukgu",
+    "target_id": "2142541",
+    "similarity": 0.6723
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263282",
+    "target_region": "bukgu",
+    "target_id": "2191655",
+    "similarity": 0.6722
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263493",
+    "target_region": "bukgu",
+    "target_id": "2173195",
+    "similarity": 0.672
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263241",
+    "target_region": "bukgu",
+    "target_id": "2227748",
+    "similarity": 0.6715
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263527",
+    "target_region": "bukgu",
+    "target_id": "2034906",
+    "similarity": 0.6707
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263500",
+    "target_region": "bukgu",
+    "target_id": "2224467",
+    "similarity": 0.6706
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266951",
+    "target_region": "bukgu",
+    "target_id": "2161904",
+    "similarity": 0.67
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266951",
+    "target_region": "bukgu",
+    "target_id": "2260820",
+    "similarity": 0.6695
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263835",
+    "target_region": "bukgu",
+    "target_id": "2225394",
+    "similarity": 0.6693
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266847",
+    "target_region": "bukgu",
+    "target_id": "2034800",
+    "similarity": 0.669
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263313",
+    "target_region": "bukgu",
+    "target_id": "2199941",
+    "similarity": 0.6687
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266901",
+    "target_region": "bukgu",
+    "target_id": "2199941",
+    "similarity": 0.6684
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263535",
+    "target_region": "bukgu",
+    "target_id": "2157114",
+    "similarity": 0.6683
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266854",
+    "target_region": "bukgu",
+    "target_id": "2253439",
+    "similarity": 0.6679
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263282",
+    "target_region": "bukgu",
+    "target_id": "2199941",
+    "similarity": 0.667
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263504",
+    "target_region": "bukgu",
+    "target_id": "2173194",
+    "similarity": 0.6667
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263414",
+    "target_region": "bukgu",
+    "target_id": "2034970",
+    "similarity": 0.6659
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263394",
+    "target_region": "bukgu",
+    "target_id": "2215732",
+    "similarity": 0.6658
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263488",
+    "target_region": "bukgu",
+    "target_id": "2167623",
+    "similarity": 0.6655
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263819",
+    "target_region": "bukgu",
+    "target_id": "2034834",
+    "similarity": 0.6652
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263240",
+    "target_region": "bukgu",
+    "target_id": "2161904",
+    "similarity": 0.6647
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263461",
+    "target_region": "bukgu",
+    "target_id": "2235964",
+    "similarity": 0.6613
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263292",
+    "target_region": "bukgu",
+    "target_id": "2215731",
+    "similarity": 0.6601
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266890",
+    "target_region": "bukgu",
+    "target_id": "2035155",
+    "similarity": 0.6599
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263298",
+    "target_region": "bukgu",
+    "target_id": "2191655",
+    "similarity": 0.6595
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266856",
+    "target_region": "bukgu",
+    "target_id": "2235968",
+    "similarity": 0.6576
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263829",
+    "target_region": "bukgu",
+    "target_id": "2034847",
+    "similarity": 0.6575
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263380",
+    "target_region": "bukgu",
+    "target_id": "2035260",
+    "similarity": 0.6572
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263301",
+    "target_region": "bukgu",
+    "target_id": "2199941",
+    "similarity": 0.6569
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263316",
+    "target_region": "bukgu",
+    "target_id": "2034951",
+    "similarity": 0.6568
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263411",
+    "target_region": "bukgu",
+    "target_id": "2034791",
+    "similarity": 0.6565
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263306",
+    "target_region": "bukgu",
+    "target_id": "2142541",
+    "similarity": 0.656
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263488",
+    "target_region": "bukgu",
+    "target_id": "2035192",
+    "similarity": 0.6558
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266950",
+    "target_region": "bukgu",
+    "target_id": "2035125",
+    "similarity": 0.6553
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266954",
+    "target_region": "bukgu",
+    "target_id": "2159184",
+    "similarity": 0.6549
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263358",
+    "target_region": "bukgu",
+    "target_id": "2142541",
+    "similarity": 0.6547
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266954",
+    "target_region": "bukgu",
+    "target_id": "2229963",
+    "similarity": 0.6546
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263387",
+    "target_region": "bukgu",
+    "target_id": "2215730",
+    "similarity": 0.654
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263253",
+    "target_region": "bukgu",
+    "target_id": "2034883",
+    "similarity": 0.6538
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266950",
+    "target_region": "bukgu",
+    "target_id": "2175494",
+    "similarity": 0.6537
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266848",
+    "target_region": "bukgu",
+    "target_id": "2222452",
+    "similarity": 0.6536
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263534",
+    "target_region": "bukgu",
+    "target_id": "2215730",
+    "similarity": 0.6534
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266938",
+    "target_region": "bukgu",
+    "target_id": "2035020",
+    "similarity": 0.6532
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263319",
+    "target_region": "bukgu",
+    "target_id": "2215735",
+    "similarity": 0.6532
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266938",
+    "target_region": "bukgu",
+    "target_id": "2034976",
+    "similarity": 0.6527
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263292",
+    "target_region": "bukgu",
+    "target_id": "2034818",
+    "similarity": 0.6524
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263398",
+    "target_region": "bukgu",
+    "target_id": "2227756",
+    "similarity": 0.6518
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263488",
+    "target_region": "bukgu",
+    "target_id": "2034937",
+    "similarity": 0.6514
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263820",
+    "target_region": "bukgu",
+    "target_id": "2215730",
+    "similarity": 0.6512
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266845",
+    "target_region": "bukgu",
+    "target_id": "2166072",
+    "similarity": 0.6512
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266947",
+    "target_region": "bukgu",
+    "target_id": "2172334",
+    "similarity": 0.6508
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263447",
+    "target_region": "bukgu",
+    "target_id": "2253438",
+    "similarity": 0.6507
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263316",
+    "target_region": "bukgu",
+    "target_id": "2035192",
+    "similarity": 0.6506
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263313",
+    "target_region": "bukgu",
+    "target_id": "2190218",
+    "similarity": 0.6504
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263829",
+    "target_region": "bukgu",
+    "target_id": "2035233",
+    "similarity": 0.6503
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2263525",
+    "target_region": "bukgu",
+    "target_id": "2142541",
+    "similarity": 0.6503
+  },
+  {
+    "source_region": "boncheong",
+    "source_id": "2266546",
+    "target_region": "bukgu",
+    "target_id": "2035172",
+    "similarity": 0.6502
+  }
+]
