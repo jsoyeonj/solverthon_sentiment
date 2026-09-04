@@ -671,13 +671,6 @@ figure {
   font-size: 20px;
 }
 
-.legend__note {
-  font-size: 14px;
-  color: var(--muted-2);
-  text-align: right;
-  white-space: nowrap;
-}
-
 .legend__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -709,11 +702,6 @@ figure {
   font-size: 14px;
   color: var(--text-4);
   line-height: 1.5;
-}
-
-.portal__count {
-  font-size: 14px;
-  color: var(--muted);
 }
 
 /* ============================ 결과 화면 ================================== */
@@ -2102,9 +2090,6 @@ figure {
   .legend__head {
     flex-wrap: wrap;
     row-gap: 4px;
-  }
-  .legend__note {
-    text-align: left;
   }
 
   /* 단독 규정 개요 표 — 176px 고정 라벨 칸이 화면 절반을 먹어서 세로로 쌓는다 */

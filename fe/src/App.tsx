@@ -213,11 +213,6 @@ export function App() {
    */
   const goBack = useCallback(() => window.history.back(), []);
 
-  const totalIndexed = useMemo(
-    () => regions.reduce((sum, region) => sum + region.totalCount, 0),
-    [regions],
-  );
-
   // ---- 렌더 -------------------------------------------------------------
 
   function renderBody() {
@@ -234,7 +229,6 @@ export function App() {
           onQueryChange={handleQueryChange}
           onSearch={() => submitSearch()}
           onBrowseAll={() => submitSearch('')}
-          totalIndexed={totalIndexed}
         />
       );
     }

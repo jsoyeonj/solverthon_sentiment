@@ -10,7 +10,6 @@ interface Props {
   onQueryChange: (q: string) => void;
   onSearch: () => void;
   onBrowseAll: () => void;
-  totalIndexed: number;
 }
 
 export function PortalView({
@@ -21,13 +20,7 @@ export function PortalView({
   onQueryChange,
   onSearch,
   onBrowseAll,
-  totalIndexed,
 }: Props) {
-  const metro = regions.find((r) => r.type === '광역');
-  const localTotal = regions
-    .filter((r) => r.type === '기초')
-    .reduce((sum, r) => sum + r.totalCount, 0);
-
   return (
     <div className="portal">
       <div className="portal__inner">
@@ -108,7 +101,6 @@ export function PortalView({
               <Icon name="tune" />
               <span>조례 정합성 상태 분류 기준</span>
             </div>
-            <span className="legend__note">표준 행정 검토 지침</span>
           </div>
           <div className="legend__grid">
             {ALL_STATUSES.map((status) => (
@@ -120,12 +112,6 @@ export function PortalView({
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="portal__count">
-          본청 {metro?.totalCount.toLocaleString() ?? 0}건 · 파일럿{' '}
-          {regions.filter((r) => r.type === '기초').length}개 지자체{' '}
-          {localTotal.toLocaleString()}건 · 총 {totalIndexed.toLocaleString()}건 색인
         </div>
       </div>
     </div>
