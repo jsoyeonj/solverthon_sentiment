@@ -99,7 +99,6 @@ export function RegionSidebar({
           <Icon name="verified" />
           <span>전체 {regionTotal}건 조례 정합성 분석 완료</span>
         </div>
-        <div className="sidebar__foot-sub">분석엔진 버전: K-Ordinance LexScan v3.2</div>
       </div>
     </aside>
   );
