@@ -1,5 +1,4 @@
 import type { JudgmentStatus, Region, SearchResult, SortKey } from '../types';
-import { RECOMMENDED_TAGS, SUGGESTION_WORDS } from '../api/mock/fixtures';
 import { isMetroRegion } from '../lib/region';
 import { Icon } from '../components/Icon';
 import { OrdinanceCard } from '../components/OrdinanceCard';
@@ -219,34 +218,8 @@ export function ResultsView(props: Props) {
               </div>
               <h3>검색 결과가 없습니다. 다른 표현으로 다시 검색해 보세요.</h3>
               <p>
-                입력하신 검색어의 철자를 확인하시거나,{' '}
-                {SUGGESTION_WORDS.map((word, i) => (
-                  <span key={word}>
-                    {i > 0 && ', '}
-                    <button
-                      type="button"
-                      className="empty__word"
-                      onClick={() => onQuerySubmit(word)}
-                    >
-                      '{word}'
-                    </button>
-                  </span>
-                ))}{' '}
-                등 보다 일반적인 행정 용어로 검색해 보세요.
+                입력하신 검색어의 철자를 확인하시거나, 보다 일반적인 행정 용어로 검색해 보세요.
               </p>
-              <div className="empty__tags">
-                <span className="empty__tags-label">추천 검색어:</span>
-                {RECOMMENDED_TAGS.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    className="tag-btn"
-                    onClick={() => onQuerySubmit(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
               <div className="empty__reset">
                 <button type="button" className="btn" onClick={onResetFilters}>
                   <Icon name="list_alt" />

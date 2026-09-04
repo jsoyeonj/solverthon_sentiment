@@ -83,7 +83,6 @@ button {
 .chip,
 .tab,
 .sort-btn,
-.tag-btn,
 .pager__btn,
 .pager__num {
   white-space: nowrap;
@@ -1332,47 +1331,6 @@ figure {
   color: var(--text-4);
   max-width: 420px;
   line-height: 1.6;
-}
-
-.empty__word {
-  font-weight: 600;
-  color: var(--navy);
-  text-decoration: underline;
-  cursor: pointer;
-  background: none;
-  border: none;
-  font-size: 14px;
-  padding: 0;
-}
-
-.empty__tags {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-.empty__tags-label {
-  font-size: 14px;
-  color: var(--muted-2);
-  margin-right: 4px;
-  font-weight: 500;
-}
-
-.tag-btn {
-  padding: 4px 10px;
-  border-radius: 4px;
-  background: var(--gray-bg);
-  color: var(--text-3);
-  font-size: 14px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-}
-
-.tag-btn:hover {
-  background: var(--border);
 }
 
 .empty__reset {

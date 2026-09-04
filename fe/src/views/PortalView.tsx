@@ -61,7 +61,7 @@ export function PortalView({
                   onSearch();
                 }
               }}
-              placeholder="귀농 지원금"
+              placeholder="귀농"
               aria-label="조례 검색어"
             />
             {query && (
