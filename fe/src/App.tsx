@@ -14,7 +14,7 @@ import { DetailView } from './views/DetailView';
 type ViewMode = 'portal' | 'results' | 'detail';
 
 const PAGE_SIZE = 5;
-const DEFAULT_REGION = '장흥';
+const DEFAULT_REGION = '본청';
 
 /** 브라우저 세션 히스토리 한 칸에 실어 보내는 스냅샷 — popstate 때 이걸로 화면을 복원한다. */
 interface NavSnapshot {
