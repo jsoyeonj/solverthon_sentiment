@@ -4,8 +4,6 @@ export function Footer() {
       <div className="shell footer__inner">
         <div className="footer__row">
           <span>지방자치단체 조례 입법 행정 지원 시스템</span>
-          <span className="sep">|</span>
-          <span style={{ color: 'var(--text-4)' }}>공공행정 표준 업무망 전용</span>
         </div>
         <div className="footer__row">
           <span className="dot dot--sm" />

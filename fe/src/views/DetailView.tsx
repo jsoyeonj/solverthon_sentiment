@@ -73,8 +73,12 @@ function ContactBlock({
 }) {
   return (
     <div className="contact-block">
-      {department && <div className="contact-block__row">소관부서: {department}</div>}
-      {phone && <div className="contact-block__row">{phone}</div>}
+      {(department || phone) && (
+        <div className="contact-block__row">
+          {department && <span>소관부서: {department}</span>}
+          {phone && <span>{phone}</span>}
+        </div>
+      )}
       <a className="btn contact-block__link" href={sourceUrl} target="_blank" rel="noreferrer noopener">
         <Icon name="open_in_new" />
         <span>{linkLabel}</span>
@@ -143,10 +147,13 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                 <span>{ordinance.statusLabel}</span>
               </span>
             </div>
-            <div className="detail__subhead">
-              <span className="dot" style={{ background: dotColor }} />
-              <span className="wrap-ok">{subheadNote}</span>
-            </div>
+            {/* 겹침 없음(no_overlap)일 땐 "고유 자치사무 확인 안건" 문구를 안 보여준다 */}
+            {!isNoOverlap && (
+              <div className="detail__subhead">
+                <span className="dot" style={{ background: dotColor }} />
+                <span className="wrap-ok">{subheadNote}</span>
+              </div>
+            )}
           </div>
 
           {ordinance.hasInternalConflict && ordinance.conflictDetails && (

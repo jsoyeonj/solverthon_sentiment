@@ -15,7 +15,7 @@ type PageToken = number | typeof ELLIPSIS;
  * 실 데이터는 지역당 수백 건이라 페이지가 수십~수백 개가 될 수 있어
  * 버튼을 전부 그리면 안 된다 (본청 366건, 북구 533건 등 — 설계서 3장 참고).
  */
-function buildPageWindow(page: number, totalPages: number, siblings = 1): PageToken[] {
+function buildPageWindow(page: number, totalPages: number, siblings = 3): PageToken[] {
   const first = 1;
   const last = totalPages;
   const start = Math.max(first + 1, page - siblings);
