@@ -3,6 +3,20 @@ import { statusBadgeClass } from '../lib/status';
 import { Disclaimer } from '../components/Disclaimer';
 import { Icon } from '../components/Icon';
 
+/**
+ * 이 조례가 본청(광역) 자체 조례인지 판별한다.
+ *
+ * BE가 각 조례 레코드에 실어 보내는 `지역` 필드는 지자체 목록 API의 짧은
+ * id("본청")가 아니라 원본 지자체기관명이다 — 본청은 "전남광주통합특별시"
+ * 그대로, 기초 지자체는 "전남광주통합특별시 장흥군"처럼 뒤에 구·군명이
+ * 붙는다(docs/api-contract.md 참고). 그래서 접미사 없이 정확히 일치할 때만
+ * 본청으로 본다. mock 데이터의 짧은 값 '본청'도 함께 인정한다.
+ */
+function isMetroOrdinance(region: string): boolean {
+  const trimmed = region.trim();
+  return trimmed === '본청' || trimmed === '전남광주통합특별시';
+}
+
 interface Props {
   ordinance: OrdinanceDetail;
   onBack: () => void;
@@ -75,7 +89,14 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
   const metro = ordinance.matchedMetropolitanOrdinance;
 
   const showComparison = !isNoOverlap && !!metro;
-  const hasBasis = ordinance.judgmentBasis.length > 0 || !!metro?.overlapNote;
+
+  // 겹침요지가 판정근거 문단 중 하나와 글자 그대로 같으면(실데이터에서 자주 그렇다)
+  // 같은 문장을 두 번 보여주는 셈이라 인용 블록은 생략한다.
+  const overlapNoteIsDuplicate =
+    !!metro?.overlapNote &&
+    ordinance.judgmentBasis.some((line) => line.trim() === metro.overlapNote.trim());
+  const showOverlapNote = !!metro?.overlapNote && !overlapNoteIsDuplicate;
+  const hasBasis = ordinance.judgmentBasis.length > 0 || showOverlapNote;
 
   const subheadNote = ordinance.hasInternalConflict
     ? '내부 조문 경합 검토 대상 안건'
@@ -154,7 +175,8 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
             </div>
           )}
 
-          {isNoOverlap && (
+          {/* "본청과 겹치는 조례 없음" 문구는 지방조례를 본청과 대조한 결과라 본청 자기 조례에는 안 맞는다 */}
+          {isNoOverlap && !isMetroOrdinance(ordinance.region) && (
             <div className="no-overlap-panel">
               <div className="no-overlap-panel__head">
                 <Icon name="verified_user" />
@@ -275,7 +297,7 @@ export function DetailView({ ordinance, onBack, backLabel, onOpenOrdinance }: Pr
                 ))}
               </div>
             )}
-            {metro?.overlapNote && (
+            {showOverlapNote && metro && (
               <blockquote className="quote">
                 <div className="quote__title">겹침 요지</div>
                 <p>{metro.overlapNote}</p>

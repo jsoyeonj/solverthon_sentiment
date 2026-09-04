@@ -165,8 +165,13 @@ export function ResultsView(props: Props) {
                   {total}건
                 </span>
               </h2>
-              <span className="bullet" />
-              <span className="results__meta-note">대조 기준: 전남광주통합특별시 자치법규</span>
+              {/* 본청 자신을 선택했을 땐 "본청과 대조"가 성립하지 않으니 문구를 뺀다 */}
+              {selectedRegion !== '본청' && (
+                <>
+                  <span className="bullet" />
+                  <span className="results__meta-note">대조 기준: 전남광주통합특별시 자치법규</span>
+                </>
+              )}
             </div>
             <div className="sorts">
               {SORTS.map((sort, i) => (

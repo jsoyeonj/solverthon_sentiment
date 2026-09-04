@@ -222,8 +222,15 @@ def search_api(region_id, query="", statuses=None, sort="relevance", page=1, pag
     for it in query_items:
         status_counts[it["판정"]] = status_counts.get(it["판정"], 0) + 1
 
-    wanted = set(statuses) if statuses else None
-    filtered = [it for it in query_items if wanted is None or it["판정"] in wanted]
+    # statuses가 None이면(파라미터 자체를 안 보낸 호출) 필터 없이 전체를 보여준다.
+    # statuses가 빈 리스트([])면 — FE 체크박스 3개를 전부 해제한 상태라는 뜻이므로
+    # "필터 없음"이 아니라 "아무 것도 선택 안 함 = 결과 0건"으로 처리해야 한다.
+    # (파이썬에서 빈 리스트는 falsy라 `if statuses`로만 판단하면 이 둘이 뒤섞인다.)
+    if statuses is None:
+        filtered = list(query_items)
+    else:
+        wanted = set(statuses)
+        filtered = [it for it in query_items if it["판정"] in wanted]
 
     if sort == "latest":
         filtered.sort(key=lambda it: it.get("시행일") or "", reverse=True)
